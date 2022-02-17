@@ -1,7 +1,11 @@
 <template>
-    <div>
+    <div class="rel">
+      <Loading v-if="addingWaiter">Waiter is being added...</Loading>
+      <Loading v-if="deletingWaiter">Waiter is being deleted...</Loading>
+      <Loading v-if="editingWaiter">Waiter is being edited...</Loading>
         <h2>Waiters</h2>
         <b-card>
+            <EditWaiter class="edit-waiter" :user="showEditUser" v-if="showEditUser" v-on:close-modal="closeModal" v-on:get-users="getUsers" v-on:editing="editingWaiterMethod"/>
             <h3>Waiters list</h3>
             <table v-if="usersList.length>0">
                 <tr>
@@ -23,7 +27,7 @@
                     <td>{{ new Date(user.created_at).toLocaleDateString() }}</td>
                     <td>{{ user.isAdmin }}</td>
                     <td>
-                        <b-button variant="primary" class="mx-2">Edit</b-button>
+                        <b-button variant="primary" class="mx-2" @click="showEdit(user)">Edit</b-button>
                         <b-button variant="danger" @click="deleteUser(user.id)">Delete</b-button>
                     </td>
                 </tr>
@@ -87,10 +91,15 @@
 
 <script>
 import db from '../firebase/firebaseInit';
-// import firebase from "firebase/app";
 import axios from 'axios';
-// import "firebase/auth";
+import EditWaiter from '@/components/EditWaiter.vue';
+import Loading from '@/components/Loading.vue';
     export default {
+      components:{
+        EditWaiter,
+        Loading,
+        
+      },
         data() {
             return {
                     email:'',
@@ -100,17 +109,40 @@ import axios from 'axios';
                     salary:'',
                     admin:false,
                     usersList:null,
+                    showEditUser:null,
+                    addingWaiter:false,
+                    deletingWaiter:false,
+                    editingWaiter:false,
             }
         },
         mounted() {
           this.getUsers();
+
         },
         methods: {
+          showEdit(user){
+            this.showEditUser = user;
+            console.log(this.showEditUser);
+          },
+          closeModal(){
+            this.showEditUser=null;
+          },
+          editingWaiterMethod(){
+            this.editingWaiter = !this.editingWaiter;
+          },
             deleteUser(id){
               console.log(db);
               console.log(id);
+              this.deletingWaiter = true;
+              let self = this;
               axios.delete(`https://resturant-api-xx.herokuapp.com/api/users/${id}`).then(res=>{
                 console.log(res);
+                self.deletingWaiter = false;
+            self.$notify({
+              group: 'foo',
+              title: 'Info',
+              text: 'User has been deleted succesfully!',
+            });
               this.getUsers();
               })
             },
@@ -123,6 +155,8 @@ import axios from 'axios';
             })
             },
             onSubmit(){
+              this.addingWaiter = true;
+              let self = this;
               axios.post("https://resturant-api-xx.herokuapp.com/api/addUser",{
                     id:null,
                     email:this.email,
@@ -134,18 +168,14 @@ import axios from 'axios';
                     created_at:Date.now(),
               }).then(res=>{  
                 console.log(res);
+                self.addingWaiter = false;
+                self.$notify({
+                  group: 'foo',
+                  title: 'Info',
+                  text: `User ${self.name} has been added succesfully!`,
+                });
                 this.getUsers();
               })
-                // let res  = await firebase.auth().createUserWithEmailAndPassword(this.email,this.pwd);
-                // db.collection("users").doc(res.user.uid).set({
-                //     email:this.email,
-                //     name:this.name,
-                //     surname:this.secondName,
-                //     salary:this.salary,
-                //     admin:this.admin,
-                //     created_at:Date.now(),
-                // })
-                // this.$router.push({name:"Profile.vue"})
             }
         },
     }
@@ -158,5 +188,22 @@ table{
     border:1px solid black;
 padding:5px;
     }
+}
+.rel{
+  position:relative;
+}
+.edit-waiter{
+position: absolute;
+left:50%;
+top:50%;
+transform: translate(-50%,-50%);
+background: rgba( 255, 255, 255, 0.25 );
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 4px );
+-webkit-backdrop-filter: blur( 4px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+padding:15px;
+z-index:11;
 }
 </style>

@@ -4,6 +4,7 @@
     <div class="app">
       <Header v-if="navigation"/>
       <router-view class="container" />
+      <notifications position="bottom right" width="500" group="foo" />
     </div>
   </div>
 </template>
@@ -60,6 +61,9 @@ export default {
   padding: 0;
   box-sizing: border-box;
   font-family: "Quicksand", sans-serif;
+}
+.vue-notification{
+  font-size:16px !important;
 }
 .container{
   background: rgba( 255, 255, 255, 0.25 );

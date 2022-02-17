@@ -16,6 +16,15 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(Vue2Editor);
 
+import Notifications from 'vue-notification'
+ 
+/*
+or for SSR:
+import Notifications from 'vue-notification/dist/ssr.js'
+*/
+ 
+Vue.use(Notifications)
+
 Vue.config.productionTip = false;
 
 let app;
