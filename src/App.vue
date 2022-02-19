@@ -79,12 +79,15 @@ $primary-dark-blue : #084C61;
 $primary-yellow:#FFC857;
 .app-wrapper{
   display:flex;
+  position:relative;
 }
 .navi{
   height:100vh;
   width:200px;
   background-color: #323031;
-  position:relative;
+  position:fixed;
+  left:0;
+  top:0;
 }
 .navi-small{
     height:100vh;
