@@ -22,7 +22,8 @@ import Notifications from 'vue-notification'
 or for SSR:
 import Notifications from 'vue-notification/dist/ssr.js'
 */
- 
+import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate)
 Vue.use(Notifications)
 
 Vue.config.productionTip = false;

@@ -45,30 +45,35 @@
         <b-form-input
           v-model="email"
           placeholder="johndoe@gmail.com"
-          required
         ></b-form-input>
+          <div class="error" v-if="!$v.email.required && $v.email.$dirty">Field is required</div>
+          <div class="error" v-if="!$v.email.minLength">Email must have at least {{$v.email.$params.minLength.min}} letters.</div>            
+          <div class="error" v-if="!$v.email.email">It has to be an valid email</div>            
       </b-form-group>
       <b-form-group  label="Password:" >
         <b-form-input
           v-model="pwd"
           type="password"
           placeholder="********"
-          required
         ></b-form-input>
+          <div class="error" v-if="!$v.pwd.required && $v.pwd.$dirty">Field is required</div>
+          <div class="error" v-if="!$v.pwd.minLength">Password must have at least {{$v.pwd.$params.minLength.min}} letters.</div>        
       </b-form-group>
       <b-form-group  label="Waiter Name:" >
         <b-form-input
           v-model="name"
           placeholder="Enter name"
-          required
         ></b-form-input>
+          <div class="error" v-if="!$v.name.required && $v.name.$dirty">Field is required</div>
+          <div class="error" v-if="!$v.name.minLength">Name must have at least {{$v.name.$params.minLength.min}} letters.</div>
       </b-form-group>
       <b-form-group  label="Waiter Second Name:" >
         <b-form-input
           v-model="secondName"
           placeholder="Enter name"
-          required
         ></b-form-input>
+          <div class="error" v-if="!$v.secondName.required && $v.secondName.$dirty">Field is required</div>
+          <div class="error" v-if="!$v.secondName.minLength">Surname must have at least {{$v.secondName.$params.minLength.min}} letters.</div>
       </b-form-group>
       <b-form-group  label="Waiter Salary" >
             <b-input-group prepend="$" class="mb-2 mr-sm-2 mb-sm-0">
@@ -83,6 +88,7 @@
 
       <b-button type="submit" variant="primary" class="mx-2">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
+      <p class="typo__p" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
             </b-form>
         </b-card>
     </div>
@@ -93,11 +99,11 @@ import db from '../firebase/firebaseInit';
 import axios from 'axios';
 import EditWaiter from '@/components/EditWaiter.vue';
 import Loading from '@/components/Loading.vue';
+import { required, minLength,email } from 'vuelidate/lib/validators'
     export default {
       components:{
         EditWaiter,
         Loading,
-        
       },
         data() {
             return {
@@ -112,11 +118,30 @@ import Loading from '@/components/Loading.vue';
                     addingWaiter:false,
                     deletingWaiter:false,
                     editingWaiter:false,
+                    submitStatus:'',
             }
         },
+        validations: {
+          name: {
+            required,
+            minLength: minLength(3)
+          },
+          secondName: {
+            required,
+            minLength: minLength(3)
+          },
+          pwd: {
+            required,
+            minLength: minLength(6)
+          },
+          email: {
+            required,
+            minLength: minLength(3),
+            email
+          },
+        },        
         mounted() {
           this.getUsers();
-
         },
         methods: {
           showEdit(user){
@@ -134,7 +159,7 @@ import Loading from '@/components/Loading.vue';
               console.log(id);
               this.deletingWaiter = true;
               let self = this;
-              axios.delete(`https://resturant-api-xx.herokuapp.com/api/users/${id}`).then(res=>{
+              axios.delete(`${process.env.VUE_APP_API_URL}/api/users/${id}`).then(res=>{
                 console.log(res);
                 self.deletingWaiter = false;
             self.$notify({
@@ -154,10 +179,15 @@ import Loading from '@/components/Loading.vue';
             })
             },
             onSubmit(){
-              console.log(process.env.VUE_APP_API_URL);
+              //validation
+            this.$v.$touch()
+            if (this.$v.$invalid) {
+              this.submitStatus = 'ERROR'
+              return;
+            } 
               this.addingWaiter = true;
               let self = this;
-              axios.post(`https://resturant-api-xx.herokuapp.com/api/addUser`,{
+              axios.post(`${process.env.VUE_APP_API_URL}/api/addUser`,{
                     id:null,
                     email:this.email,
                     password:this.pwd,
@@ -229,8 +259,6 @@ top:50%;
 transform: translate(-50%,-50%);
 background: rgba(0, 0, 0, 0.85);
 box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-backdrop-filter: blur( 4px );
--webkit-backdrop-filter: blur( 4px );
 border-radius: 10px;
 border: 1px solid rgba( 255, 255, 255, 0.18 );
 padding:35px;

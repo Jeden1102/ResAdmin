@@ -65,6 +65,11 @@ export default {
 .vue-notification{
   font-size:16px !important;
 }
+.error{
+  color:Red;
+  font-size:14px;
+  font-weight: 400;
+}
 .container{
   background: rgba( 255, 255, 255, 0.25 );
 box-shadow: 0 3px 12px 0 rgba( 31, 38, 135, 0.37 );

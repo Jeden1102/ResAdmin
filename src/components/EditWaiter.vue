@@ -10,6 +10,9 @@
           placeholder="johndoe@gmail.com"
           required
         ></b-form-input>
+          <div class="error" v-if="!$v.email.required && $v.email.$dirty">Field is required</div>
+          <div class="error" v-if="!$v.email.minLength">Email must have at least {{$v.email.$params.minLength.min}} letters.</div>            
+          <div class="error" v-if="!$v.email.email">It has to be an valid email</div>               
       </b-form-group>
       <b-form-group  label="Password(If don't want to change - leave blank):" >
         <b-form-input
@@ -24,6 +27,8 @@
           placeholder="Enter name"
           required
         ></b-form-input>
+          <div class="error" v-if="!$v.name.required && $v.name.$dirty">Field is required</div>
+          <div class="error" v-if="!$v.name.minLength">Name must have at least {{$v.name.$params.minLength.min}} letters.</div>        
       </b-form-group>
       <b-form-group  label="Waiter Second Name:" >
         <b-form-input
@@ -31,11 +36,14 @@
           placeholder="Enter name"
           required
         ></b-form-input>
+          <div class="error" v-if="!$v.secondName.required && $v.secondName.$dirty">Field is required</div>
+          <div class="error" v-if="!$v.secondName.minLength">Surname must have at least {{$v.secondName.$params.minLength.min}} letters.</div>        
       </b-form-group>
       <b-form-group  label="Waiter Salary" >
             <b-input-group prepend="$" class="mb-2 mr-sm-2 mb-sm-0">
             <b-form-input v-model="salary"  placeholder="25"></b-form-input>
             </b-input-group>
+
       </b-form-group>
 
       <b-form-group class="my-2">
@@ -46,12 +54,16 @@
 
       <b-button type="submit" variant="primary">Save changes</b-button>
       <b-button type="reset" class="mx-2" variant="warning" @click="closeModal">Cancel</b-button>
+      <p class="typo__p" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
+
             </b-form>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { required, minLength,email } from 'vuelidate/lib/validators'
+
     export default {
         name:"EditWaiter",
         props:["user"],
@@ -65,15 +77,38 @@ import axios from 'axios';
                     secondName:this.user.surname,
                     salary:this.user.salary,
                     admin:this.user.isAdmin,
+                    submitStatus:'',
             }
         },
+        validations: {
+          name: {
+            required,
+            minLength: minLength(3)
+          },
+          secondName: {
+            required,
+            minLength: minLength(3)
+          },
+          email: {
+            required,
+            minLength: minLength(3),
+            email
+          },
+        },  
         methods: {
           closeModal(){
             this.$emit('close-modal');
           },
           onSubmit(){
+            //validation
+            let self = this;
+            this.$v.$touch()
+            if (this.$v.$invalid) {
+              this.submitStatus = 'ERROR'
+              return;
+            } 
             this.$emit('editing');
-            axios.post(`https://resturant-api-xx.herokuapp.com/api/users/${this.user.id}?_method=PUT`,{
+            axios.post(`${process.env.VUE_APP_API_URL}/api/users/${this.user.id}?_method=PUT`,{
                     email:this.email,
                     password:this.pwd,
                     name:this.name,
@@ -85,7 +120,11 @@ import axios from 'axios';
               this.$emit('get-users');
             this.$emit('editing');
             this.$emit('close-modal');
-
+            self.$notify({
+                  group: 'foo',
+                  title: 'Info',
+                  text: `User ${self.name} has been edited succesfully!`,
+                });
 
             }).catch(err=>{
               console.log(err)

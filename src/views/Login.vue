@@ -67,7 +67,7 @@ import axios from 'axios';
         methods: {
             onSubmit(){
                 let self = this;
-                axios.post('https://resturant-api-xx.herokuapp.com/api/login', {
+                axios.post(`${process.env.VUE_APP_API_URL}/api/login`, {
                     email: this.email,
                     password:this.password
                 })
