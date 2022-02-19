@@ -78,7 +78,7 @@
 
       <b-form-group class="my-2">
         <input v-model="admin" id="s1" type="checkbox" class="switch">
-        <label for="s1">Menagment options</label>
+        <label for="s1">Menagment optionss</label>
       </b-form-group>
 
       <b-button type="submit" variant="primary" class="mx-2">Submit</b-button>
@@ -146,6 +146,7 @@ import Loading from '@/components/Loading.vue';
               })
             },
             getUsers(){
+              console.log(process.env.VUE_APP_API_URL)
             axios.get(`${process.env.VUE_APP_API_URL}/api/users`).then(res=>{
               this.usersList = res.data;
             }).catch(err=>{
