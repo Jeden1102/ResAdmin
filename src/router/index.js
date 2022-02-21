@@ -6,6 +6,7 @@ import Profile from "../views/Profile.vue";
 import Login from "../views/Login.vue";
 //admin routes
 import Waiters from "../views/Waiters.vue";
+import Menu from "../views/Menu.vue";
 
 Vue.use(VueRouter);
 
@@ -35,6 +36,11 @@ const routes = [
     path: "/Waiters",
     name: "Waiters",
     component: Waiters,
+  },
+  {
+    path: "/Menu",
+    name: "Menu",
+    component: Menu,
   },
 ];
 

@@ -1,12 +1,15 @@
 <template>
     <div class="rel">
+
       <Loading v-if="addingWaiter">Waiter is being added...</Loading>
       <Loading v-if="deletingWaiter">Waiter is being deleted...</Loading>
       <Loading v-if="editingWaiter">Waiter is being edited...</Loading>
         <h2>Waiters</h2>
         
         <b-card>
-            <EditWaiter class="edit-waiter" :user="showEditUser" v-if="showEditUser" v-on:close-modal="closeModal" v-on:get-users="getUsers" v-on:editing="editingWaiterMethod"/>
+            <Transition name="fade">
+              <EditWaiter class="edit-waiter" :user="showEditUser" v-if="showEditUser" v-on:close-modal="closeModal" v-on:get-users="getUsers" v-on:editing="editingWaiterMethod"/>
+            </Transition>
             <h3>Waiters list</h3>
             <table v-if="usersList.length>0" class="styled-table">
                 <tr>
@@ -214,6 +217,15 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
 <style lang="scss" scoped>
 $primary-dark-blue : #084C61;
 $primary-yellow:#FFC857;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 .styled-table {
     border-collapse: collapse;
     margin: 25px 0;

@@ -25,6 +25,9 @@
           placeholder="Enter email"
           required
         ></b-form-input>
+        <div class="error" v-if="!$v.email.required && $v.email.$dirty">Field is required</div>
+          <div class="error" v-if="!$v.email.minLength">Email must have at least {{$v.email.$params.minLength.min}} letters.</div>            
+          <div class="error" v-if="!$v.email.email">It has to be an valid email</div>    
       </b-form-group>
           <b-form-group
         id="input-group-2"
@@ -38,9 +41,12 @@
           placeholder="******"
           required
         ></b-form-input>
+                  <div class="error" v-if="!$v.password.required && $v.password.$dirty">Field is required</div>
+          <div class="error" v-if="!$v.password.minLength">Password must have at least {{$v.password.$params.minLength.min}} letters.</div>            
       </b-form-group>
 
       <b-button class="btn" type="submit" variant="primary">Login</b-button>
+      <p class="typo__p" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
     </b-form>
     <b-alert show variant="danger" v-if="error">{{ errorMsg }}</b-alert>
     
@@ -53,6 +59,8 @@
 // import firebase from "firebase/app";
 // import "firebase/auth";
 import axios from 'axios';
+import { required, minLength,email } from 'vuelidate/lib/validators'
+
     export default {
         components:{
         },
@@ -62,10 +70,27 @@ import axios from 'axios';
                 password:'',
                 error:false,
                 errorMsg:'',
+                submitStatus:'',
             }
         },
+        validations: {
+          password: {
+            required,
+            minLength: minLength(6)
+          },
+          email: {
+            required,
+            minLength: minLength(3),
+            email
+          },
+        },  
         methods: {
             onSubmit(){
+            this.$v.$touch()
+            if (this.$v.$invalid) {
+              this.submitStatus = 'ERROR'
+              return;
+            } 
                 let self = this;
                 axios.post(`${process.env.VUE_APP_API_URL}/api/login`, {
                     email: this.email,
