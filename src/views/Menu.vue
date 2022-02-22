@@ -4,7 +4,7 @@
             <h2>Menu</h2>
               <b-tabs content-class="mt-3">
                     <b-tab title="Products" active>
-                        <h5>Products</h5>
+                        <Products/>
                     </b-tab>
                     <b-tab title="Categories">
                         <Categories/>
@@ -16,9 +16,11 @@
 
 <script>
 import Categories from '@/components/Categories.vue';
+import Products from '@/components/Products.vue';
     export default {
         components:{
             Categories,
+            Products
         }
 
     }

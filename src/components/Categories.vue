@@ -8,7 +8,7 @@
             </Transition>
     <h5>Categories</h5>
         <b-card>
-        <h3>Waiters list</h3>
+        <h3>Categories list</h3>
             <table class="styled-table">
                 <tr>
                     <td>#</td>
@@ -89,6 +89,7 @@ import EditCategory from '@/components/EditCategory.vue';
             this.editingWaiter = !this.editingWaiter;
           },
             addCategory(){
+                let self = this;
             if (this.$v.categoryName.$invalid) {
               this.submitStatus = 'ERROR'
               return;
@@ -101,6 +102,11 @@ import EditCategory from '@/components/EditCategory.vue';
                 this.getCategories();
                 this.categoryName = '';
                 this.addingWaiter = false;
+                                self.$notify({
+                    group: 'foo',
+                    title: 'Info',
+                    text: `Category ${self.name} has been added succesfully!`,
+                    });
             }) 
             },
             getCategories(){
