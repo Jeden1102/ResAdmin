@@ -3,27 +3,37 @@
         <Loading v-if="addingWaiter">Category is being added...</Loading>
       <Loading v-if="deletingWaiter">Category is being deleted...</Loading>
       <Loading v-if="editingWaiter">Category is being edited...</Loading>
-            <!-- <Transition name="fade">
-              <EditCategory class="edit-waiter" :user="showEditUser" v-if="showEditUser" v-on:close-modal="closeModal" v-on:get-users="getCategories" v-on:editing="editingWaiterMethod"/>
-            </Transition> -->
+            <Transition name="fade">
+              <EditProduct class="edit-waiter" :product="showEditProduct" v-if="showEditProduct" v-on:close-modal="closeModal" v-on:get-users="getCategories" v-on:editing="editingWaiterMethod"/>
+            </Transition>
     <h5>Products</h5>
         <b-card>
         <h3>Products list</h3>
-            <!-- <table class="styled-table">
+            <table class="styled-table">
                 <tr>
                     <td>#</td>
                     <td>Name</td>
+                    <td>size</td>
+                    <td>price</td>
+                    <td>image</td>
+                    <td>discount</td>
                     <td>Actions</td>
                 </tr>
-                <tr v-for="category in categories" :key="category.id">
-                    <td>{{category.id}}</td>
-                    <td>{{ category.name }}</td>
+                <tr v-for="product in products" :key="product.id">
+                    <td>{{product.id}}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.size }}</td>
+                    <td>{{ product.price }}</td>
                     <td>
-                        <b-button variant="primary" class="mx-2" @click="showEdit(category)">Edit</b-button> 
-                        <b-button variant="danger" @click="deleteCategory(category.id)">Delete</b-button>
+                      <img class="small-img" :src="`${imgLink}/storage/uploads/${product.image_url}`" alt="">
+                    </td>
+                    <td>{{ product.discount }}</td>
+                    <td>
+                        <b-button variant="primary" class="mx-2" @click="showEdit(product)">Edit</b-button> 
+                        <b-button variant="danger" @click="deleteProduct(product.id)">Delete</b-button>
                     </td>
                 </tr>
-            </table> -->
+            </table>
         </b-card>
         <b-card>
             <h4>Add Procduct</h4>
@@ -94,6 +104,28 @@
                         <option v-for="size in sizes" :key="size" :value="size">{{size}}</option>
                     </select>
                 </b-form-group>
+                <b-card class="my-2">
+                <b-form-group label="Variants:">
+                  <input type="checkbox" id="var" v-model="showAddVariants">
+                  <label for="var">Add Variants</label><br>
+                  <div v-if="showAddVariants">
+                    <label for="">Variant price:</label>
+                    <div class="input-group mb-3">
+                      <span class="input-group-text">$</span>
+                      <input v-model="priceVariant" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                    </div>
+                    <label for="">Variant size:</label>
+                      <select v-model="sizeVariant" class="form-select" aria-label="Default select example">
+                          <option selected>Select size</option>
+                          <option v-for="size in sizes" :key="size" :value="size">{{size}}</option>
+                      </select>       
+                  <b-button @click="addVariant"  variant="primary" class="my-2">Add Variant</b-button>
+                  <p v-for="(variant,index) in variants" :key="index">Size :{{variant.size}}, Price :  {{variant.price}}$ <b-button size="sm" @click="removeVariant(index)" variant="danger">Remove</b-button></p>
+                  </div>
+
+                </b-form-group>
+                </b-card>
+
                 <b-form-group label="Image cover:">
                 <label for="file-in" class="file-label">
                     <h3>Add a photo</h3>
@@ -102,7 +134,6 @@
                 </label>
                 <input type="file" id="file-in" class="hidden"  @change="previewPhoto">        
                 </b-form-group>
-                  
                 <div class="my-2">
                 <b-button type="submit" variant="primary" class="mx-2">Submit</b-button>
                 <b-button type="reset" variant="danger">Reset</b-button>
@@ -117,6 +148,7 @@
 import { required, minLength } from 'vuelidate/lib/validators'
 import axios from 'axios';
 import Loading from '@/components/Loading.vue';
+import EditProduct from '@/components/EditProduct.vue';
     export default {
         data() {
             return {
@@ -134,20 +166,28 @@ import Loading from '@/components/Loading.vue';
                 special:false,
                 size:'',
                 //end form
+                //variants
+                showAddVariants:false,
+                priceVariant:'',
+                sizeVariant:'',
+                variants:[],
+                //end variant
                 submitStatus:'',
                 products:[],
                 categories:[],
                 deletingWaiter:false,
                 addingWaiter:false,
                 editingWaiter:false,
-                showEditUser:null,
+                showEditProduct:null,
                 sizes:["small","medium","larget","x-larger","200","300","500","other"],
                 url:null,
                 imgCover:null,
+                imgLink : process.env.VUE_APP_API_URL,
             }
         },
         components:{
             Loading,
+            EditProduct
         },
         validations: {
           name: {
@@ -157,19 +197,44 @@ import Loading from '@/components/Loading.vue';
         },
         mounted() {
             this.getCategories();
+            this.getProducts();
         },          
         methods: {
+          addVariant(){
+            const obj = {price:this.priceVariant,size:this.sizeVariant};
+            this.variants.push(obj);
+          },
+          removeVariant(index){
+            this.variants.splice(index,1);
+          },
+          getProducts(){
+            axios.get(`${process.env.VUE_APP_API_URL}/api/products`).then(data=>{
+              this.products = data.data;
+              console.log(this.products)
+            })
+          },
+          deleteProduct(id){
+            let self = this;
+            axios.delete(`${process.env.VUE_APP_API_URL}/api/products/${id}`).then(res=>{
+              console.log(res);
+              self.getProducts();
+              self.$notify({
+              group: 'foo',
+              title: 'Info',
+              text: 'Product has been deleted succesfully!',
+            });              
+            })
+          },
         showEdit(user){
-            this.showEditUser = user;
-            console.log(this.showEditUser);
+            this.showEditProduct = user;
           },
           closeModal(){
-            this.showEditUser=null;
+            this.showEditProduct=null;
           },
           editingWaiterMethod(){
             this.editingWaiter = !this.editingWaiter;
           },
-            addProduct(){
+            addProduct(event){
                 let existingObj = this;
                 const config = {
                     headers: {
@@ -179,9 +244,30 @@ import Loading from '@/components/Loading.vue';
                 let data = new FormData();
                 data.append('file', this.imgCover);
                 data.append('name', this.name);
+                data.append('desc', this.desc);
+                data.append('price', this.price);
+                data.append('discount', this.discount);
+                data.append('category_id', this.category);
+                data.append('chicken', this.chicken);
+                data.append('cheese', this.cheese);
+                data.append('size', this.size);
+                data.append('tomato', this.tomato);
+                data.append('paprika', this.paprika);
+                data.append('beef', this.beef);
+                data.append('special', this.special);
+                data.append('variants', JSON.stringify(this.variants));
                 axios.post(`${process.env.VUE_APP_API_URL}/api/addProduct`, data, config)
                     .then(function (res) {
+                      console.log(res);
                         existingObj.success = res.data.success;
+                        event.target.reset()
+                        existingObj.variants = [];
+                          existingObj.$notify({
+                          group: 'foo',
+                          title: 'Info',
+                          text: 'Product has been added succesfully!',
+                        });
+                        existingObj.getProducts();
                     })
                     .catch(function (err) {
                         existingObj.output = err;
@@ -217,6 +303,10 @@ import Loading from '@/components/Loading.vue';
 </script>
 
 <style lang="scss" scoped>
+.small-img{
+  width:100px;
+  height:100px;
+}
 .file-label{
     width:100%;
     height:200px;
@@ -463,5 +553,20 @@ body {
   @media(max-width: 800px) {
     flex-direction: column;
   }
+}
+.edit-waiter{
+position: sticky;
+left:40%;
+top:0%;
+transform: translateX(0%);
+background: rgba(0, 0, 0, 0.85);
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+padding:15px;
+z-index:11;
+color:White;
+overflow-y: scroll;
+max-height:90vh;
 }
 </style>
