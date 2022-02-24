@@ -1,6 +1,7 @@
 <template>
     <div>
-            <b-form @submit.prevent="addProduct" >
+            <b-form @submit.prevent="editProduct" >
+              <div class="flex">
                 <b-form-group  label="Product Name:" >
                     <b-form-input
                     v-model="name"
@@ -13,12 +14,15 @@
                         <option v-for="category in categories" :key="category.id" :value="category.id">{{category.name}}</option>
                     </select>
                 </b-form-group>
+              </div>
+
                 <b-form-group class="my-2">
                     <div class="form-floating">
                     <textarea v-model="desc" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
                     <label for="floatingTextarea2">Description</label>
                     </div>
                 </b-form-group>
+                <div class="flex">
                 <b-form-group label="Price:">
                     <div class="input-group mb-3">
                     <span class="input-group-text">$</span>
@@ -31,6 +35,8 @@
                     <input v-model="discount" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
                     </div>
                 </b-form-group>
+                </div>
+
                 <b-form-group class="my-2 " label="Addons:">
                     <div class="flex">
                         <div class="my-2">
@@ -72,18 +78,17 @@
                 <b-form-group label="Image cover:">
                 <label for="file-in" class="file-label">
                     <h3>Add a photo</h3>
-                    <img v-if="!url" src="@/assets/upload.png" alt="">
+                    <img v-if="!url" :src="`${imgLink}/storage/uploads/${product.image_url}`" alt="">
                     <img v-if="url" :src="url" alt="">
                 </label>
                 <input type="file" id="file-in" class="hidden"  @change="previewPhoto">        
                 </b-form-group>
                 <div class="my-2">
                 <b-button type="submit" variant="primary" class="mx-2">Submit</b-button>
-                <b-button type="reset" variant="danger">Reset</b-button>
+                <b-button type="button" variant="danger" @click="closeModal">Cancel</b-button>
                 </div>
                 <p class="typo__p" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
             </b-form>
-        <b-button type="reset" variant="danger" @click="closeModal">Cancel</b-button>
     </div>
 </template>
 
@@ -95,7 +100,7 @@ import axios from 'axios'
             return {
                                 //form
                 name:this.product.name,
-                category:this.product.category,
+                category:1,
                 desc:this.product.desc,
                 price:this.product.price,
                 discount:this.product.discount,
@@ -116,10 +121,12 @@ import axios from 'axios'
                 url:null,
                 imgCover:null,
                 imgLink : process.env.VUE_APP_API_URL,
+                imgChanged:false,
             }
         },
         mounted(){
             this.getCategories();
+
         },
         methods: {
         closeModal(){
@@ -131,12 +138,63 @@ import axios from 'axios'
             console.log(this.categories)
         })
         },
+            editProduct(event){
+                let existingObj = this;
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                let data = new FormData();
+                if(this.imgChanged){
+                  data.append('file', this.imgCover);
+                }
+                data.append('name', this.name);
+                data.append('desc', this.desc);
+                data.append('price', this.price);
+                data.append('discount', this.discount);
+                data.append('category_id', this.category);
+                data.append('chicken', this.chicken);
+                data.append('cheese', this.cheese);
+                data.append('size', this.size);
+                data.append('tomato', this.tomato);
+                data.append('paprika', this.paprika);
+                data.append('beef', this.beef);
+                data.append('special', this.special);
+                axios.post(`${process.env.VUE_APP_API_URL}/api/products/${this.product.id}?_method=PUT`, data, config)
+                    .then(function (res) {
+                      console.log(res);
+                        existingObj.success = res.data.success;
+                        event.target.reset()
+                        existingObj.variants = [];
+                          existingObj.$notify({
+                          group: 'foo',
+                          title: 'Info',
+                          text: 'Product has been edited succesfully!',
+                        });
+                        existingObj.$emit('close-modal');
+                        existingObj.$emit('get-products');
+                    })
+                    .catch(function (err) {
+                        existingObj.output = err;
+                    });
+            },
+                    previewPhoto(e){
+                      const file = e.target.files[0];
+                      console.log(file);
+                      this.imgCover = file;
+                    this.url = URL.createObjectURL(file);
+                    this.imgChanged = true;
+            }
         },
 
     }
 </script>
 
 <style lang="scss" scoped>
+.hidden{
+  display:none;
+}
 .flex{
     display:Flex;
     gap:15px;

@@ -4,7 +4,7 @@
       <Loading v-if="deletingWaiter">Category is being deleted...</Loading>
       <Loading v-if="editingWaiter">Category is being edited...</Loading>
             <Transition name="fade">
-              <EditProduct class="edit-waiter" :product="showEditProduct" v-if="showEditProduct" v-on:close-modal="closeModal" v-on:get-users="getCategories" v-on:editing="editingWaiterMethod"/>
+              <EditProduct class="edit-waiter" :product="showEditProduct" v-if="showEditProduct" v-on:close-modal="closeModal" v-on:get-products="getProducts" v-on:editing="editingWaiterMethod"/>
             </Transition>
     <h5>Products</h5>
         <b-card>
@@ -566,7 +566,6 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );
 padding:15px;
 z-index:11;
 color:White;
-overflow-y: scroll;
 max-height:90vh;
 }
 </style>
