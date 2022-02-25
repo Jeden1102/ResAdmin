@@ -126,7 +126,6 @@ import axios from 'axios'
         },
         mounted(){
             this.getCategories();
-
         },
         methods: {
         closeModal(){

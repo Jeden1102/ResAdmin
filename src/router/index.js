@@ -7,6 +7,7 @@ import Login from "../views/Login.vue";
 //admin routes
 import Waiters from "../views/Waiters.vue";
 import Menu from "../views/Menu.vue";
+import ResView from "../views/ResView.vue";
 
 Vue.use(VueRouter);
 
@@ -41,6 +42,11 @@ const routes = [
     path: "/Menu",
     name: "Menu",
     component: Menu,
+  },
+  {
+    path: "/View",
+    name: "View",
+    component: ResView,
   },
 ];
 

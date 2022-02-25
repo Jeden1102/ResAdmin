@@ -31,7 +31,7 @@
                     <p><router-link :class="[navOpen ? 'link' : 'link2']" :to="{name:'Waiters'}"><img class="icon" src="@/assets/waiter.png" alt=""> <span v-if="navOpen">Waiters</span></router-link></p>
                     <p><router-link :class="[navOpen ? 'link' : 'link2']" :to="{name:'Menu'}"><img class="icon" src="@/assets/menu.png" alt=""> <span v-if="navOpen">Menu</span></router-link></p>
                     <p><router-link :class="[navOpen ? 'link' : 'link2']" to="#"><img class="icon" src="@/assets/pay.png" alt=""> <span v-if="navOpen">Pays</span></router-link></p>
-                    <p><router-link :class="[navOpen ? 'link' : 'link2']" to="#"><img class="icon" src="@/assets/view.png" alt=""> <span v-if="navOpen">Edit view</span></router-link></p>
+                    <p><router-link :class="[navOpen ? 'link' : 'link2']" :to="{name:'View'}"><img class="icon" src="@/assets/view.png" alt=""> <span v-if="navOpen">Edit view</span></router-link></p>
                     <p><router-link :class="[navOpen ? 'link' : 'link2']" to="#"><img class="icon" src="@/assets/hand.png" alt=""> <span v-if="navOpen">Sales info</span></router-link></p>
                 </b-card>
             </b-collapse>
