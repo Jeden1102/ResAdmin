@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div class="rel">
+        <SetViewModal class="modal-x" :data="saveViewJson" v-if="showModal" v-on:cancel="cancel"/>
+        <LoadViewModal class="modal-x"  v-if="showLoadModal" v-on:cancel="cancel"/>
         <b-card>
             <h2>Restaurant View</h2>
               <b-form inline class="form-x" @submit.prevent="addStolik">
@@ -19,6 +21,9 @@
             </b-form>
         </b-card>
         <b-button class="my-2" variant="success" @click="setAllTablesToDb" v-if="stolikiChanged">Save new view (set all tables positions)</b-button>
+        <b-button class="my-2" variant="outline-primary" @click="setView" >Save this view as a template</b-button>
+        <b-button variant="outline-info" @click="showLoadModalMethod">Load view</b-button>
+
         <b-card class="sala">
             <Stolik v-for="(stolik,index) of stoliki" :key="index" class="x" :stolik="stolik" v-on:remove-stolik="removeStolik" v-on:set-stolik="setStolik"/>
         </b-card>
@@ -28,6 +33,8 @@
 <script>
 import axios from 'axios';
 import Stolik from '@/components/Stolik.vue';
+import SetViewModal from '@/components/SetViewModal.vue';
+import LoadViewModal from '@/components/LoadViewModal.vue';
     export default {
         data() {
             return {
@@ -35,22 +42,35 @@ import Stolik from '@/components/Stolik.vue';
                 yCoord:'',
                 stoliki:[],
                 stolikiChanged:false,
+                showModal:false,
+                saveViewJson:null,
+                showLoadModal:false,
             }
         },
         components:{
             Stolik,
+            SetViewModal,
+            LoadViewModal
         },
 
         mounted() {
             this.getStoliki();
         },
         methods: {
+            cancel(){
+                this.showModal=false;
+            },
             addStolik(){
                 axios.post(`${process.env.VUE_APP_API_URL}/api/stoliki`,{
                     xCoord:this.xCoord,
                     yCoord:this.yCoord
                 }).then(res=>{
                     console.log(res);
+                        this.$notify({
+                        group: 'foo',
+                        title: 'Info',
+                        text: `New table has been added succesfully!`,
+                        });
                     this.getStoliki();
                 })
             },
@@ -61,9 +81,13 @@ import Stolik from '@/components/Stolik.vue';
                 })
             },
             removeStolik(id){
-                console.log(id)
-                this.stoliki = this.stoliki.filter(el=>el.id!=id);
-                console.log(this.stoliki);
+                var foundIndex = this.stoliki.findIndex(x => x.id ==id);
+                this.stoliki.splice(foundIndex,1)
+                        this.$notify({
+                        group: 'foo',
+                        title: 'Info',
+                        text: `New table has been removed succesfully!`,
+                        });
             },
             setStolik(id,xCoord,yCoord){
                 this.stolikiChanged = true;
@@ -73,8 +97,6 @@ import Stolik from '@/components/Stolik.vue';
                 console.log(this.stoliki);
             },
             setAllTablesToDb(){
-                let oldView = JSON.stringify(this.stoliki);
-                console.log(oldView);
                 this.stoliki.forEach(el=>{
                     axios.post(`${process.env.VUE_APP_API_URL}/api/stoliki/${el.id}?_method=PUT`,{
                     xCoord:el.xCoord,
@@ -92,6 +114,23 @@ import Stolik from '@/components/Stolik.vue';
                     console.log(err)
                     })
                     })
+            },
+            setView(){
+                let newData = [];
+                 this.stoliki.forEach(el=>{
+                     let obj = {};
+                     obj.xCoord = el.xCoord;
+                     obj.yCoord = el.yCoord;
+                     newData.push(obj);
+                })
+                this.showLoadModal = false;
+                this.showModal = true;
+                let oldView = JSON.stringify(newData);
+                this.saveViewJson = oldView;
+            },
+            showLoadModalMethod(){
+                this.showModal = false;
+                this.showLoadModal = true;
             }
         },
 
@@ -99,6 +138,23 @@ import Stolik from '@/components/Stolik.vue';
 </script>
 
 <style lang="scss" scoped>
+
+.rel{
+    position:relative;
+}
+.modal-x{
+    position: absolute;
+left:50%;
+top:50%;
+transform: translate(-50%,-50%);
+background: rgba(0, 0, 0, 0.65);
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+padding:35px;
+z-index:9991;
+color:White;
+}
 .x{
     width:100px;
     height:100px;
