@@ -1,12 +1,14 @@
 <template>
     <div>
-    <vue-resizable :active="handlers" class="stolik" :dragSelector="dragSelector" :top="stolik.yCoord" :left="stolik.xCoord" >
+    <vue-resizable :active="handlers" @drag:start="movedMethod" @drag:end="setStolik" class="stolik" :dragSelector="dragSelector" :top="yCoord" :left="xCoord" >
         <div class="resizable-content">
+            <div class="stol-id">{{ stolik.id }}</div>
             <img src="@/assets/table1.png" alt="">
+            
             <div class="drag-container-1"></div>
             <div class="flex">
                 <b-button class="btn" size="sm" @click="deleteStolik" variant="danger"><img src="@/assets/bin.png" style="height:22px;width:22px;" alt=""></b-button>
-                <b-button v-if="moved" @drag:start="movedMethod" size="sm" variant="primary">Set</b-button>
+                <b-button v-if="moved" @click="setStolikToDb" size="sm" variant="primary">Set</b-button>
             </div>
         </div>
     </vue-resizable>
@@ -26,19 +28,45 @@ import axios from 'axios'
                 dragSelector: ".drag-container-1, .drag-container-2",
                 handlers:[],
                 moved:false,
+                xCoord:this.stolik.xCoord,
+                yCoord:this.stolik.yCoord,
             }
         },
         methods: {
             deleteStolik(){
                 axios.delete(`${process.env.VUE_APP_API_URL}/api/stoliki/${this.stolik.id}`).then(res=>{
-                    console.log(res)
-                    this.$emit('get-stoliks');
+                    console.log(res);
+                    this.$emit('remove-stolik',this.stolik.id);
                 })
             },
             movedMethod(){
                 this.moved = true;
+            },
+            setStolik(data){
+                this.xCoord = data.left;
+                this.yCoord = data.top;
+                this.$emit('set-stolik',this.stolik.id,data.left,data.top);
+            },
+            setStolikToDb(){
+                axios.post(`${process.env.VUE_APP_API_URL}/api/stoliki/${this.stolik.id}?_method=PUT`,{
+                xCoord:this.xCoord,
+                yCoord:this.yCoord,
+                }).then(res=>{
+                console.log(res);
+                this.moved = false;
+                this.$notify({
+                    group: 'foo',
+                    title: 'Info',
+                    text: `New position has been set succesfully!`,
+                    });
+
+                }).catch(err=>{
+                console.log(err)
+                })
             }
         },
+
+
     }
 </script>
 
@@ -46,6 +74,15 @@ import axios from 'axios'
 .stolik{
     width:100px !important;
     height:100px !important;
+}
+.stol-id{
+    position:absolute;
+    left:0;
+    top:0;
+    background-color: #fff;
+    padding:1px;
+    border-radius:0 0 3px 0;
+    font-weight: bold;
 }
 .resizable-content{
     width:100px;
