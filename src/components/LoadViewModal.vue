@@ -4,7 +4,7 @@
         {{ views }}
         <div v-for="(view,index) of views" :key="index">
             {{ view.name }}
-            <b-button>Preview</b-button>
+            <b-button>Previews</b-button>
         </div>
 
     </div>
