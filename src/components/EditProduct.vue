@@ -78,7 +78,7 @@
                 <b-form-group label="Image cover:">
                 <label for="file-in" class="file-label">
                     <h3>Add a photo</h3>
-                    <img v-if="!url" :src="`${imgLink}/storage/uploads/${product.image_url}`" alt="">
+                    <img v-if="!url" :src="`${imgLink}/${product.image_url}`" alt="">
                     <img v-if="url" :src="url" alt="">
                 </label>
                 <input type="file" id="file-in" class="hidden"  @change="previewPhoto">        
@@ -120,7 +120,7 @@ import axios from 'axios'
                 sizes:["small","medium","larget","x-larger","200","300","500","other"],
                 url:null,
                 imgCover:null,
-                imgLink : process.env.VUE_APP_API_URL,
+                imgLink : "https://foodpenguinimages.s3.amazonaws.com/uploads",
                 imgChanged:false,
             }
         },

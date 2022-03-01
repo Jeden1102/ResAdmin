@@ -25,7 +25,7 @@
                     <td>{{ product.size }}</td>
                     <td>{{ product.price }}</td>
                     <td>
-                      <img class="small-img" :src="`${imgLink}/storage/uploads/${product.image_url}`" alt="">
+                      <img class="small-img" :src="`${imgLink}/${product.image_url}`" alt="">
                     </td>
                     <td>{{ product.discount }}</td>
                     <td>
@@ -182,7 +182,7 @@ import EditProduct from '@/components/EditProduct.vue';
                 sizes:["small","medium","larget","x-larger","200","300","500","other"],
                 url:null,
                 imgCover:null,
-                imgLink : process.env.VUE_APP_API_URL,
+                imgLink : "https://foodpenguinimages.s3.amazonaws.com/uploads",
             }
         },
         components:{
@@ -255,13 +255,14 @@ import EditProduct from '@/components/EditProduct.vue';
                 data.append('paprika', this.paprika);
                 data.append('beef', this.beef);
                 data.append('special', this.special);
+                if(this.variants.length>0){
                 data.append('variants', JSON.stringify(this.variants));
+                }
                 axios.post(`${process.env.VUE_APP_API_URL}/api/addProduct`, data, config)
                     .then(function (res) {
                       console.log(res);
                         existingObj.success = res.data.success;
                         event.target.reset()
-                        existingObj.variants = [];
                           existingObj.$notify({
                           group: 'foo',
                           title: 'Info',
