@@ -1,7 +1,7 @@
 <template>
     <div class="rel">
         <SetViewModal class="modal-x" :data="saveViewJson" v-if="showModal" v-on:cancel="cancel"/>
-        <LoadViewModal class="modal-x"  v-if="showLoadModal" v-on:cancel="cancel"/>
+        <LoadViewModal class="modal-x"  v-if="showLoadModal" v-on:cancel="cancel" v-on:preview-view="previewView" v-on:clear-preview="clearPreview"/>
         <b-card>
             <h2>Restaurant View</h2>
               <b-form inline class="form-x" @submit.prevent="addStolik">
@@ -24,8 +24,11 @@
         <b-button class="my-2" variant="outline-primary" @click="setView" >Save this view as a template</b-button>
         <b-button variant="outline-info" @click="showLoadModalMethod">Load view</b-button>
 
-        <b-card class="sala">
-            <Stolik v-for="(stolik,index) of stoliki" :key="index" class="x" :stolik="stolik" v-on:remove-stolik="removeStolik" v-on:set-stolik="setStolik"/>
+        <b-card class="sala" v-if="previewStoliki.length==0">
+            <Stolik  v-for="(stolik,index) of stoliki" :key="index" class="x" :stolik="stolik" v-on:remove-stolik="removeStolik" v-on:set-stolik="setStolik"/>
+        </b-card>
+        <b-card class="sala" v-else>
+            <Stolik  v-for="(stolik,index) of previewStoliki" :key="index" class="x" :stolik="stolik" />
         </b-card>
     </div>
 </template>
@@ -41,6 +44,7 @@ import LoadViewModal from '@/components/LoadViewModal.vue';
                 xCoord:'',
                 yCoord:'',
                 stoliki:[],
+                previewStoliki:[],
                 stolikiChanged:false,
                 showModal:false,
                 saveViewJson:null,
@@ -57,8 +61,17 @@ import LoadViewModal from '@/components/LoadViewModal.vue';
             this.getStoliki();
         },
         methods: {
+            previewView(view){
+                this.previewStoliki = JSON.parse(view.value);
+                console.log(this.previewStoliki);
+                console.log(this.previewStoliki.length);
+            },
+            clearPreview(){
+                this.previewStoliki = [];
+            },
             cancel(){
-                this.showModal=false;
+                console.log("ok");
+                this.showLoadModal=false;
             },
             addStolik(){
                 axios.post(`${process.env.VUE_APP_API_URL}/api/stoliki`,{
