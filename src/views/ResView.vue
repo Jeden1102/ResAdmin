@@ -1,7 +1,7 @@
 <template>
     <div class="rel">
         <SetViewModal class="modal-x" :data="saveViewJson" v-if="showModal" v-on:cancel="cancel"/>
-        <LoadViewModal class="modal-x"  v-if="showLoadModal" v-on:cancel="cancel" v-on:preview-view="previewView" v-on:clear-preview="clearPreview"/>
+        <LoadViewModal class="modal-x"  v-if="showLoadModal" v-on:cancel="cancel" v-on:preview-view="previewView" v-on:clear-preview="clearPreview" v-on:save-view="saveView"/>
         <b-card>
             <h2>Restaurant View</h2>
               <b-form inline class="form-x" @submit.prevent="addStolik">
@@ -22,7 +22,7 @@
         </b-card>
         <b-button class="my-2" variant="success" @click="setAllTablesToDb" v-if="stolikiChanged">Save new view (set all tables positions)</b-button>
         <b-button class="my-2" variant="outline-primary" @click="setView" >Save this view as a template</b-button>
-        <b-button variant="outline-info" @click="showLoadModalMethod">Load view</b-button>
+        <b-button variant="outline-info" class="mx-2" @click="showLoadModalMethod" v-if="stoliki.length ==0">Load view</b-button>
 
         <b-card class="sala" v-if="previewStoliki.length==0">
             <Stolik  v-for="(stolik,index) of stoliki" :key="index" class="x" :stolik="stolik" v-on:remove-stolik="removeStolik" v-on:set-stolik="setStolik"/>
@@ -62,16 +62,35 @@ import LoadViewModal from '@/components/LoadViewModal.vue';
         },
         methods: {
             previewView(view){
-                this.previewStoliki = JSON.parse(view.value);
+                this.stoliki = [];
+                this.stoliki = JSON.parse(view.value);
                 console.log(this.previewStoliki);
                 console.log(this.previewStoliki.length);
             },
             clearPreview(){
-                this.previewStoliki = [];
+                this.getStoliki();
             },
             cancel(){
                 console.log("ok");
+                this.showModal =false;
                 this.showLoadModal=false;
+            },
+            saveView(){
+                console.log(this.previewStoliki);
+                axios.post(`${process.env.VUE_APP_API_URL}/api/deleteViews`).then(data=>{
+                    console.log(data);
+                });
+                axios.post(`${process.env.VUE_APP_API_URL}/api/stoliki`,{
+                    arr:this.stoliki,
+                }).then(res=>{
+                    console.log(res);
+                        this.$notify({
+                        group: 'foo',
+                        title: 'Info',
+                        text: `View has been restored succesfully!`,
+                        });
+                    this.getStoliki();
+                })
             },
             addStolik(){
                 axios.post(`${process.env.VUE_APP_API_URL}/api/stoliki`,{

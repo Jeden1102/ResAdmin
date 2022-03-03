@@ -6,7 +6,41 @@
             <p>Menagment system</p>
             
             <h2>Designed for individuals, with passion and heart.</h2>
-            <h1>TUTAJ SLIDER Z FUNKCJONALNOŚCIAMI + SCREEN JAK TU https://dribbble.com/shots/17193380-Dashboard-Login-Page</h1>
+                    <div>
+            <b-carousel
+            ref="myCarousel"
+            id="carousel-1"
+            v-model="slide"
+            :interval="4000"
+            fade
+            img-width="1024"
+            img-height="480"
+            style="text-shadow: 1px 1px 2px #333;"
+            @sliding-start="onSlideStart"
+            @sliding-end="onSlideEnd"
+            >
+            <!-- Text slides with image -->
+            <b-carousel-slide
+                caption="User menagement"
+                text="As a menager you can easilly add waiters and other workers."
+                class="s1"
+                img-blank
+            ></b-carousel-slide>
+            <b-carousel-slide
+                caption="Menu menagement"
+                text="As a menager you can easilly create and edit whole menu of your restaurant."
+                class="s2"
+                img-blank
+            ></b-carousel-slide>
+            <b-carousel-slide
+                caption="Restaurant view menagement"
+                text="As a menager you can easilly change the view of the restaurant."
+                class="s3"
+                img-blank
+            ></b-carousel-slide>
+            </b-carousel>
+
+        </div>
         </div>
     </div>
     <div class="login-box">
@@ -71,6 +105,8 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
                 error:false,
                 errorMsg:'',
                 submitStatus:'',
+                        slide: 0,
+        sliding: null
             }
         },
         validations: {
@@ -84,7 +120,17 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
             email
           },
         },  
+        mounted() {
+        },
         methods: {
+                  onSlideStart(slide) {
+                      console.log(slide);
+        this.sliding = true
+      },
+      onSlideEnd(slide) {
+                      console.log(slide);
+        this.sliding = false
+      },
             onSubmit(){
             this.$v.$touch()
             if (this.$v.$invalid) {
@@ -111,6 +157,21 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
 </script>
 
 <style lang="scss" scoped>
+.s1{
+    background:url("../assets/waiters.png");
+    background-size: cover;
+    background-position: center;
+}
+.s2{
+    background:url("../assets/products.png");
+    background-size: cover;
+    background-position: center;
+}
+.s3{
+    background:url("../assets/resview.png");
+    background-size: cover;
+    background-position: center;
+}
 .orange{
     color:#F28843;
 }

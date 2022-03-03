@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Load View</h2>
+        <h2 v-if="!previewing">Load View</h2>
         <table v-if="views.length>0 && previewing==false">
             <tr>
                 <td>Name</td>
@@ -16,6 +16,8 @@
         </table>
         <h3 v-if="views.length==0 && previewing==false">No views has been saved yet...</h3>
         <div v-if="previewing">
+            <h2>Save {{ previewName }} view</h2>
+            
               <b-button  variant="success" v-b-modal.modal-1>Save</b-button>
  
                 <b-modal ref="my-modal" hide-footer id="modal-1" title="Warning">
@@ -26,7 +28,7 @@
                 </b-modal>
             <b-button class="mx-2" variant="warning" @click="cancelPreview">Cancel</b-button>
         </div>
-        <b-button variant="warning" @click="closeModal" class="mt-4">Cancel</b-button>
+        <b-button variant="warning" @click="closeModal" v-if="!previewing" class="mt-4">Cancel</b-button>
 
     </div>
 </template>
@@ -38,6 +40,7 @@ import axios from 'axios';
             return {
                 views:[],
                 previewing:false,
+                previewName:'',
             }
         },
         mounted() {
@@ -54,11 +57,13 @@ import axios from 'axios';
             },
             hideAndSave(){
                 this.$refs['my-modal'].hide()
-                console.log("TUTAJ ref do zmiany stolików + do bazy");
+                this.$emit('save-view');
+                this.previewing = false;
             },
             previewView(view){
                 this.$emit('preview-view',view);
                 this.previewing = true;
+                this.previewName = view.name
             },
             deleteView(id){
                 console.log(id)
