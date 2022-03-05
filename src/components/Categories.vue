@@ -34,7 +34,7 @@
                     placeholder="Pizza"
                     ></b-form-input>
                     <div class="error" v-if="!$v.categoryName.required && $v.categoryName.$dirty">Field is required</div>
-                    <div class="error" v-if="!$v.categoryName.minLength">Name must have at least {{$v.categoryName.$params.minLength.min}} letters.</div>
+                    <div class="error" v-if="!$v.categoryName.minLength">Categroy name must have at least {{$v.categoryName.$params.minLength.min}} letters.</div>
                 </b-form-group>
                 <div class="my-2">
                 <b-button type="submit" variant="primary" class="mx-2">Submit</b-button>

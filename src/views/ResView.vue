@@ -1,23 +1,27 @@
 <template>
     <div class="rel">
+        <Loading v-if="addingTable">Table is being added...</Loading>
         <SetViewModal class="modal-x" :data="saveViewJson" v-if="showModal" v-on:cancel="cancel"/>
         <LoadViewModal class="modal-x"  v-if="showLoadModal" v-on:cancel="cancel" v-on:preview-view="previewView" v-on:clear-preview="clearPreview" v-on:save-view="saveView"/>
         <b-card>
             <h2>Restaurant View</h2>
               <b-form inline class="form-x" @submit.prevent="addStolik">
                   <div>
-                    <label class="sr-only" for="inline-form-input-username">Username</label>
                     <b-input-group prepend="X" class="mb-2 mr-sm-2 mb-sm-0">
                     <b-form-input id="inline-form-input-username" placeholder="Enter X Coord" v-model="xCoord"></b-form-input>
                     </b-input-group>
+                    <div class="error" v-if="!$v.xCoord.required && $v.xCoord.$dirty">Field is required</div>
+                    <div class="error" v-if="!$v.xCoord.minLength">X coord can't be empty.</div>    
                   </div>
                   <div>
-                        <label class="sr-only" for="inline-form-input-username">Username</label>
                         <b-input-group prepend="Y" class="mb-2 mr-sm-2 mb-sm-0">
                         <b-form-input id="inline-form-input-username" placeholder="Enter Y Coord" v-model="yCoord"></b-form-input>
                         </b-input-group>
+                    <div class="error" v-if="!$v.yCoord.required && $v.yCoord.$dirty">Field is required</div>
+                    <div class="error" v-if="!$v.yCoord.minLength">Y coord can't be empty.</div>    
                   </div>
                 <b-button type="submit" variant="primary">Add</b-button>
+                <p class="typo__p" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
             </b-form>
         </b-card>
         <b-button class="my-2" variant="success" @click="setAllTablesToDb" v-if="stolikiChanged">Save new view (set all tables positions)</b-button>
@@ -37,7 +41,9 @@
 import axios from 'axios';
 import Stolik from '@/components/Stolik.vue';
 import SetViewModal from '@/components/SetViewModal.vue';
+import { required, minLength } from 'vuelidate/lib/validators'
 import LoadViewModal from '@/components/LoadViewModal.vue';
+import Loading from '@/components/Loading.vue';
     export default {
         data() {
             return {
@@ -49,14 +55,26 @@ import LoadViewModal from '@/components/LoadViewModal.vue';
                 showModal:false,
                 saveViewJson:null,
                 showLoadModal:false,
+                submitStatus:'',
+                addingTable:false,
             }
         },
         components:{
             Stolik,
             SetViewModal,
-            LoadViewModal
+            LoadViewModal,
+            Loading
         },
-
+        validations: {
+          xCoord: {
+            required,
+            minLength: minLength(1)
+          },
+          yCoord: {
+            required,
+            minLength: minLength(1)
+          },
+        },  
         mounted() {
             this.getStoliki();
         },
@@ -93,6 +111,12 @@ import LoadViewModal from '@/components/LoadViewModal.vue';
                 })
             },
             addStolik(){
+            this.$v.$touch()
+            if (this.$v.$invalid) {
+              this.submitStatus = 'ERROR'
+              return;
+            } 
+            this.addingTable = true;
                 axios.post(`${process.env.VUE_APP_API_URL}/api/stoliki`,{
                     xCoord:this.xCoord,
                     yCoord:this.yCoord
@@ -104,6 +128,7 @@ import LoadViewModal from '@/components/LoadViewModal.vue';
                         text: `New table has been added succesfully!`,
                         });
                     this.getStoliki();
+                    this.addingTable = false;
                 })
             },
             getStoliki(){

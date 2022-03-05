@@ -144,6 +144,7 @@ import axios from 'axios'
                         'content-type': 'multipart/form-data'
                     }
                 }
+                this.$emit('edit-product-loading');
                 let data = new FormData();
                 if(this.imgChanged){
                   data.append('file', this.imgCover);
@@ -173,6 +174,7 @@ import axios from 'axios'
                         });
                         existingObj.$emit('close-modal');
                         existingObj.$emit('get-products');
+                        existingObj.$emit('edit-product-loading');
                     })
                     .catch(function (err) {
                         existingObj.output = err;

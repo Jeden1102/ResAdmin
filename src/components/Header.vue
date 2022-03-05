@@ -3,7 +3,9 @@
         <b-dropdown>
         <template #button-content>
       <div class="avatar">
-        <img src="@/assets/avata.png" alt="">
+        <img v-if="profilePicture" :src="`${imgLink}/${profilePicture}`"  alt="">
+        <img v-else src="@/assets/avata.png" alt="">
+        
       </div>
         </template>
         <b-dropdown-item ><router-link class="link" :to="{name:'Profile'}" ><img class="icon" src="@/assets/user.png" alt=""> Profile</router-link></b-dropdown-item>
@@ -16,6 +18,13 @@
 // import firebase from "firebase/app";
 // import "firebase/auth";
     export default {
+      data() {
+        return {
+                profilePicture:this.$store.state.user.photo_url,
+                imgCover:null,
+                imgLink : "https://foodpenguinimages.s3.amazonaws.com/uploads/avatars",
+        }
+      },
         methods: {
         signOut(){
             this.$router.push({name:"Login"});
@@ -49,13 +58,13 @@ $primary-yellow:#FFC857;
 .avatar{
   width:35px;
   height:35px;
-  background: $primary-dark-blue;
   display:grid;
   place-content: center;
   border-radius:50%;
   img{
-    width:25px;
-    height:25px
+    width:35px;
+    height:35px;
+    border-radius:50%;
   }
 }
 </style>

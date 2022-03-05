@@ -12,7 +12,6 @@ export default new Vuex.Store({
       state.navOpen = !state.navOpen;
     },
     setProfileInfo(state,doc){
-
       state.user = null;
       state.user = doc;
       console.log(state.user);

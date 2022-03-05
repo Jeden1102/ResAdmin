@@ -3,11 +3,15 @@
         <Loading v-if="addingWaiter">Category is being added...</Loading>
       <Loading v-if="deletingWaiter">Category is being deleted...</Loading>
       <Loading v-if="editingWaiter">Category is being edited...</Loading>
+
             <Transition name="fade">
-              <EditProduct class="edit-waiter" :product="showEditProduct" v-if="showEditProduct" v-on:close-modal="closeModal" v-on:get-products="getProducts" v-on:editing="editingWaiterMethod"/>
+              <EditProduct  class="edit-waiter" :product="showEditProduct" v-if="showEditProduct" v-on:close-modal="closeModal" v-on:get-products="getProducts" v-on:edit-product-loading="editingProduct = !editingProduct" v-on:editing="editingWaiterMethod"/>
             </Transition>
     <h5>Products</h5>
-        <b-card>
+        <b-card class="rel">
+                <Loading v-if="addingProduct">Product is being added...</Loading>
+      <Loading v-if="deletingProduct">Product is being deleted...</Loading>
+      <Loading v-if="editingProduct">Product is being edited...</Loading>
         <h3>Products list</h3>
             <table class="styled-table">
                 <tr>
@@ -25,7 +29,8 @@
                     <td>{{ product.size }}</td>
                     <td>{{ product.price }}</td>
                     <td>
-                      <img class="small-img" :src="`${imgLink}/${product.image_url}`" alt="">
+                      <img class="small-img" v-if="product.image_url != 'x'" :src="`${imgLink}/${product.image_url}`" alt="">
+                      <img class="small-img" v-else src="@/assets/no-pictures.png" alt="">
                     </td>
                     <td>{{ product.discount }}</td>
                     <td>
@@ -51,6 +56,7 @@
                         <option selected>Select category</option>
                         <option v-for="category in categories" :key="category.id" :value="category.id">{{category.name}}</option>
                     </select>
+                    <div class="error" v-if="!$v.category.required && $v.category.$dirty">Field is required</div>
                 </b-form-group>
                 <b-form-group class="my-2">
                     <div class="form-floating">
@@ -63,6 +69,8 @@
                     <span class="input-group-text">$</span>
                     <input v-model="price" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
                     </div>
+                    <div class="error" v-if="!$v.price.required && $v.price.$dirty">Field is required</div>
+                    <div class="error" v-if="!$v.price.minLength">Price must have at least {{$v.price.$params.minLength.min}} digit.</div>
                 </b-form-group>
                 <b-form-group label="Discount:">
                     <div class="input-group mb-3">
@@ -103,6 +111,8 @@
                         <option selected>Select size</option>
                         <option v-for="size in sizes" :key="size" :value="size">{{size}}</option>
                     </select>
+                    <div class="error" v-if="!$v.size.required && $v.size.$dirty">Field is required</div>
+
                 </b-form-group>
                 <b-card class="my-2">
                 <b-form-group label="Variants:">
@@ -118,7 +128,8 @@
                       <select v-model="sizeVariant" class="form-select" aria-label="Default select example">
                           <option selected>Select size</option>
                           <option v-for="size in sizes" :key="size" :value="size">{{size}}</option>
-                      </select>       
+                      </select>    
+                         
                   <b-button @click="addVariant"  variant="primary" class="my-2">Add Variant</b-button>
                   <p v-for="(variant,index) in variants" :key="index">Size :{{variant.size}}, Price :  {{variant.price}}$ <b-button size="sm" @click="removeVariant(index)" variant="danger">Remove</b-button></p>
                   </div>
@@ -178,6 +189,9 @@ import EditProduct from '@/components/EditProduct.vue';
                 deletingWaiter:false,
                 addingWaiter:false,
                 editingWaiter:false,
+                deletingProduct:false,
+                addingProduct:false,
+                editingProduct:false,
                 showEditProduct:null,
                 sizes:["small","medium","larget","x-larger","200","300","500","other"],
                 url:null,
@@ -193,6 +207,16 @@ import EditProduct from '@/components/EditProduct.vue';
           name: {
             required,
             minLength: minLength(3)
+          },
+          category: {
+            required,
+          },
+          price: {
+            required,
+            minLength: minLength(1)
+          },
+          size: {
+            required,
           },
         },
         mounted() {
@@ -214,9 +238,11 @@ import EditProduct from '@/components/EditProduct.vue';
             })
           },
           deleteProduct(id){
+            this.deletingProduct=true;
             let self = this;
             axios.delete(`${process.env.VUE_APP_API_URL}/api/products/${id}`).then(res=>{
               console.log(res);
+            this.deletingProduct=false;
               self.getProducts();
               self.$notify({
               group: 'foo',
@@ -235,6 +261,12 @@ import EditProduct from '@/components/EditProduct.vue';
             this.editingWaiter = !this.editingWaiter;
           },
             addProduct(event){
+                this.$v.$touch()
+                if (this.$v.$invalid) {
+                this.submitStatus = 'ERROR'
+                return;
+                } 
+                this.addingProduct=true;
                 let existingObj = this;
                 const config = {
                     headers: {
@@ -269,6 +301,7 @@ import EditProduct from '@/components/EditProduct.vue';
                           text: 'Product has been added succesfully!',
                         });
                         existingObj.getProducts();
+                        existingObj.addingProduct=false;
                     })
                     .catch(function (err) {
                         existingObj.output = err;
