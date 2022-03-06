@@ -8,6 +8,9 @@ import Login from "../views/Login.vue";
 import Waiters from "../views/Waiters.vue";
 import Menu from "../views/Menu.vue";
 import ResView from "../views/ResView.vue";
+//waiter
+import Res from "../views/Res.vue";
+
 
 Vue.use(VueRouter);
 
@@ -47,6 +50,12 @@ const routes = [
     path: "/View",
     name: "View",
     component: ResView,
+  },
+  //waiter
+  {
+    path: "/Restaurant",
+    name: "Res",
+    component: Res,
   },
 ];
 
