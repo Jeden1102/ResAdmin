@@ -10,6 +10,7 @@ import Menu from "../views/Menu.vue";
 import ResView from "../views/ResView.vue";
 //waiter
 import Res from "../views/Res.vue";
+import Skiba from "../views/Skiba.vue";
 
 
 Vue.use(VueRouter);
@@ -56,6 +57,11 @@ const routes = [
     path: "/Restaurant",
     name: "Res",
     component: Res,
+  },
+  {
+    path: "/Skiba",
+    name: "Skiba",
+    component: Skiba,
   },
 ];
 
