@@ -1,6 +1,6 @@
 <template>
     <div class="rel">
-        <ShowOrderModal class="modal-x"  v-if="showModal" :id="stolId" :categories="categories" :products="products" v-on:cancel="cancel"/>
+        <ShowOrderModal class="modal-x"  v-if="showModal" :id="stolId" :categories="categories" :products="products" v-on:cancel="cancel" v-on:get-stoliki="getStoliki"/>
         <b-card>
             <h2>Restaurant View</h2>
         </b-card>
@@ -38,7 +38,8 @@ import ShowOrderModal from '@/components/ShowOrderModal.vue';
             getStoliki(){
                 axios.get(`${process.env.VUE_APP_API_URL}/api/stoliki`).then(data=>{
                     this.stoliki = data.data;
-                    console.log(this.stoliki);
+                    console.log("TAK");
+                    console.log(this.stoliki)
                 })
             },
             showModalMethod(id){

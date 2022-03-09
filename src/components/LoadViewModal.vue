@@ -59,6 +59,7 @@ import axios from 'axios';
                 this.$refs['my-modal'].hide()
                 this.$emit('save-view');
                 this.previewing = false;
+                localStorage.removeItem("orders");
             },
             previewView(view){
                 this.$emit('preview-view',view);
