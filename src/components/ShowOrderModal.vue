@@ -30,7 +30,10 @@
                                     <label for="floatingTextarea2">Notes</label>
                                     </div>
                                 </b-form-group>
-                              <b-button variant="primary" v-b-modal.modal-1>Checkout</b-button>
+                                    <b-input-group  prepend="$" class="mb-2 mr-sm-2 mb-sm-0 my-2">
+                                    <b-form-input v-model="tip" id="inline-form-input-username" placeholder="Tip"></b-form-input>
+                                    </b-input-group>
+                              <b-button variant="primary" class="my-2" v-b-modal.modal-1>Checkout</b-button>
 
                             <b-modal ref="modal-1" hide-footer id="modal-1" title="BootstrapVue">
                                 <p class="my-4">Are you sure your want to checkout this table ? After that you cant change any details about it's order!</p>
@@ -90,7 +93,8 @@ import axios from 'axios';
             return{
                 imgLink : "https://foodpenguinimages.s3.amazonaws.com/uploads",
                 orderedProducts:null,
-                notes:''
+                notes:'',
+                tip:0
             }
         },
         computed:{
@@ -110,6 +114,7 @@ import axios from 'axios';
                     notes:this.notes,
                     waiter_id:this.$store.state.user.id,
                     table_id:this.id,
+                    tip:this.tip,
                     products:JSON.stringify(this.orderedProducts[0].items)
                 }).then(res=>{
                     console.log(res)

@@ -112,12 +112,7 @@
                     
                 </b-card-text>
             </b-tab>
-            <b-tab >
-                <template #title>
-                    Statistics <img class="icon" src="@/assets/stats.png" alt="">
-                </template>
-                <b-card-text>Statistics</b-card-text>
-            </b-tab>
+
             </b-tabs>
         </b-card>
     </div>

@@ -10,6 +10,7 @@ import Menu from "../views/Menu.vue";
 import ResView from "../views/ResView.vue";
 //waiter
 import Res from "../views/Res.vue";
+import Stats from "../views/Stats.vue";
 import Skiba from "../views/Skiba.vue";
 
 
@@ -62,6 +63,11 @@ const routes = [
     path: "/Skiba",
     name: "Skiba",
     component: Skiba,
+  },
+  {
+    path: "/Stats",
+    name: "Stats",
+    component: Stats,
   },
 ];
 

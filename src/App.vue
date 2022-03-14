@@ -5,6 +5,7 @@
       <Header v-if="navigation"/>
       <router-view class="container" />
       <notifications position="bottom right" width="500" group="foo" />
+      
     </div>
   </div>
 </template>
