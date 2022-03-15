@@ -22,6 +22,7 @@ import axios from 'axios';
             return {
                 workStarted:false,
                 workInfo:null,
+                secondsX:0,
             }
         },
         components:{
@@ -46,7 +47,7 @@ import axios from 'axios';
             },
             seconds(){
             var pad = function(num, size) { return ('000' + num).slice(size * -1); },
-            time = parseFloat(this.secBetween).toFixed(3),
+            time = parseFloat(this.secondsX).toFixed(3),
             hours = Math.floor(time / 60 / 60),
             minutes = Math.floor(time / 60) % 60,
             seconds = Math.floor(time - minutes * 60);
@@ -63,6 +64,10 @@ import axios from 'axios';
                         console.log("xd")
                         this.workInfo = res.data;
                         this.workStarted = true;
+                this.secondsX = this.secBetween;
+                    setInterval(()=>{
+                        this.secondsX++;
+                    },1000)
                     }else{
                         this.workInfo = null;
                     }
@@ -76,6 +81,10 @@ import axios from 'axios';
                 }).then(res=>{
                     this.workStarted = true;
                     this.workInfo = res.data;
+                    this.secondsX = this.secBetween;
+                    setInterval(()=>{
+                        this.secondsX++;
+                    },1000)
                     this.$notify({
                     group: 'foo',
                     title: 'Info',
@@ -85,22 +94,23 @@ import axios from 'axios';
                     console.log(err)
                 })
             },
+
             endWork(){
                 this.workStarted = false;
                 this.workInfo = null;
-                console.log(new Date().toLocaleDateString())
                 axios.post(`${process.env.VUE_APP_API_URL}/api/work/${this.$store.state.user.id}?_method=PUT`,{
                     end_time: new Date().toLocaleTimeString('en-US', { hour12: false, 
                                              hour: "numeric", 
                                              minute: "numeric"}),
                     end_day:new Date().toLocaleDateString(),
+                    hours_worked:this.seconds,
                 }).then(res=>{
+                    console.log(res);
                     this.$notify({
                     group: 'foo',
                     title: 'Info',
                     text: 'Work time ended ! See yaa',
                     });
-                    console.log(res);
                 }).catch(err=>{
                     console.log(err)
                 })
