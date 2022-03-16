@@ -96,6 +96,8 @@ import axios from 'axios';
 import { required, minLength,email } from 'vuelidate/lib/validators'
 
     export default {
+  name: "Login",
+
         components:{
         },
         data() {
@@ -144,9 +146,10 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
                 })
                 .then(function (response) {
                     console.log(response);
-                    self.$router.push({name:"Home"});
                     localStorage.setItem('user',JSON.stringify(response.data.user[0]));
                     self.$store.dispatch("getCurrentUser");
+                    self.$router.push({name:"Home"});
+
                 })
                 .catch(function (error) {
                     console.log(error);

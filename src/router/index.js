@@ -11,7 +11,7 @@ import ResView from "../views/ResView.vue";
 //waiter
 import Res from "../views/Res.vue";
 import Stats from "../views/Stats.vue";
-import Skiba from "../views/Skiba.vue";
+import store from "../store/index";
 
 
 Vue.use(VueRouter);
@@ -21,53 +21,93 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+    meta:{
+      title:"Home",
+      requiresAdmin:false,
+      requiresAuth: true,
+    }
   },
   {
     path: "/worktime",
     name: "WorkTime",
     component: WorkTime,
+    meta:{
+      title:"WorkTime",
+      requiresAdmin:false,
+      requiresAuth: true,
+    }
   },
   {
     path: "/Profile",
     name: "Profile",
     component: Profile,
+    meta:{
+      title:"Profile",
+      requiresAdmin:false,
+      requiresAuth: true,
+    }
   },
   {
     path: "/Login",
     name: "Login",
     component: Login,
+    meta:{
+      title:"Login",
+      requiresAdmin:false,
+      requiresAuth: false,
+    }
   },
   //admin routes
   {
     path: "/Waiters",
     name: "Waiters",
     component: Waiters,
+    meta:{
+      title:"Waiters",
+      requiresAdmin:true,
+      requiresAuth: true,
+    }
   },
   {
     path: "/Menu",
     name: "Menu",
     component: Menu,
+    meta:{
+      title:"Menu",
+      requiresAdmin:true,
+      requiresAuth: true,
+    }
   },
   {
     path: "/View",
     name: "View",
     component: ResView,
+    meta:{
+      title:"View",
+      requiresAdmin:true,
+      requiresAuth: true,
+    }
   },
   //waiter
   {
     path: "/Restaurant",
     name: "Res",
     component: Res,
-  },
-  {
-    path: "/Skiba",
-    name: "Skiba",
-    component: Skiba,
+    meta:{
+      title:"Restaurant",
+      requiresAdmin:false,
+      requiresAuth: true,
+    }
   },
   {
     path: "/Stats",
     name: "Stats",
     component: Stats,
+    meta:{
+      title:"Stats",
+      requiresAdmin:false,
+      requiresAuth: true,
+    }
   },
 ];
 
@@ -76,5 +116,30 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+router.beforeEach((to,from,next)=>{
+  document.title = `${to.meta.title} | Food Penguin`;
+  return next();
+})
+router.beforeEach(async (to,from,next)=>{
+
+  let user = store.state.user;
+  let admin = null;
+  if (user) {
+    admin = store.state.user.isAdmin;
+  }
+  if (to.matched.some((res) => res.meta.requiresAuth)) {
+    if (user) {
+      if (to.matched.some((res) => res.meta.requiresAdmin)) {
+        if (admin) {
+          return next();
+        }
+        return next({ name: "Home" });
+      }
+      return next();
+    }
+    return next({ name: "Home" });
+  }
+  return next();
+})
 
 export default router;

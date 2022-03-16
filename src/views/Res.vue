@@ -16,6 +16,8 @@ import axios from 'axios';
 import Stolik from '@/components/Stolik.vue';
 import ShowOrderModal from '@/components/ShowOrderModal.vue';
     export default {
+  name: "Res",
+
         components:{
             Stolik,
             ShowOrderModal,

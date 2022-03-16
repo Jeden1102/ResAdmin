@@ -45,7 +45,10 @@ import { required, minLength } from 'vuelidate/lib/validators'
 import LoadViewModal from '@/components/LoadViewModal.vue';
 import Loading from '@/components/Loading.vue';
     export default {
+  name: "ResView",
+
         data() {
+
             return {
                 xCoord:'',
                 yCoord:'',

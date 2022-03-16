@@ -18,6 +18,8 @@
 import Categories from '@/components/Categories.vue';
 import Products from '@/components/Products.vue';
     export default {
+  name: "Menu",
+
         components:{
             Categories,
             Products

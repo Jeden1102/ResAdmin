@@ -22,6 +22,8 @@
 import TipsInfo from '@/components/TipsInfo.vue';
 import WorkInfo from '@/components/WorkInfo.vue';
 export default{
+  name: "Stats",
+
   components:{
 TipsInfo,
 WorkInfo

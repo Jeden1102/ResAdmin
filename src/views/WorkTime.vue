@@ -18,6 +18,7 @@
 <script>
 import axios from 'axios';
     export default {
+  name: "WorkTime",
         data() {
             return {
                 workStarted:false,

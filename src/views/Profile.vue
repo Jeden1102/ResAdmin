@@ -122,6 +122,8 @@
 import axios from 'axios'
 import Loading from '@/components/Loading.vue';
     export default {
+  name: "Profile",
+
         data() {
             return {
                 user:null,

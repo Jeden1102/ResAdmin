@@ -104,6 +104,8 @@ import EditWaiter from '@/components/EditWaiter.vue';
 import Loading from '@/components/Loading.vue';
 import { required, minLength,email } from 'vuelidate/lib/validators'
     export default {
+  name: "Waiters",
+
       components:{
         EditWaiter,
         Loading,
@@ -174,7 +176,6 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
               })
             },
             getUsers(){
-              console.log(process.env.VUE_APP_API_URL)
             axios.get(`${process.env.VUE_APP_API_URL}/api/users`).then(res=>{
               this.usersList = res.data;
             }).catch(err=>{
