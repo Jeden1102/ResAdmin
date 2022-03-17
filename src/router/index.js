@@ -8,9 +8,11 @@ import Login from "../views/Login.vue";
 import Waiters from "../views/Waiters.vue";
 import Menu from "../views/Menu.vue";
 import ResView from "../views/ResView.vue";
+import SalesInfo from "../views/SalesInfo.vue";
 //waiter
 import Res from "../views/Res.vue";
 import Stats from "../views/Stats.vue";
+import NotFound from "../views/NotFound.vue";
 import store from "../store/index";
 
 
@@ -69,6 +71,16 @@ const routes = [
     }
   },
   {
+    path: "/SalesInfo",
+    name: "SalesInfo",
+    component: SalesInfo,
+    meta:{
+      title:"SalesInfo",
+      requiresAdmin:true,
+      requiresAuth: true,
+    }
+  },
+  {
     path: "/Menu",
     name: "Menu",
     component: Menu,
@@ -109,6 +121,7 @@ const routes = [
       requiresAuth: true,
     }
   },
+  { path: "*", component: NotFound }
 ];
 
 const router = new VueRouter({
@@ -121,25 +134,39 @@ router.beforeEach((to,from,next)=>{
   return next();
 })
 router.beforeEach(async (to,from,next)=>{
-
-  let user = store.state.user;
-  let admin = null;
-  if (user) {
+  store.dispatch('getCurrentUser');
+  let user =  store.state.user;
+  let admin = false;
+  if(user){
     admin = store.state.user.isAdmin;
   }
-  if (to.matched.some((res) => res.meta.requiresAuth)) {
-    if (user) {
-      if (to.matched.some((res) => res.meta.requiresAdmin)) {
-        if (admin) {
-          return next();
-        }
-        return next({ name: "Home" });
-      }
-      return next();
-    }
-    return next({ name: "Home" });
+  if(admin){
+    return next();
   }
-  return next();
+
+  if(to.meta.requiresAuth){
+    console.log("trzeba");
+    if(to.meta.requiresAdmin){
+      if(!admin){
+        return next({ name: 'Home' });
+      }else{
+        return next();
+      }
+    }
+    if(user){
+      return next();
+    }else{
+      console.log("TAK")
+      return next({ name: 'Login' });
+    }
+  }
+
+  console.log(user);
+  console.log(admin);
+  console.log(to)
+  console.log(from)
+  console.log(next)
+  next();
 })
 
 export default router;

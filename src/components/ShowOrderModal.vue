@@ -5,7 +5,8 @@
            <b-collapse id="collapse-25" class="my-2" >
                 <b-card class="text-black">
                     <div v-if="orderedProducts">
-                        <table class="styled-table" >
+                        <div class="table-responsive">
+                      <table class="styled-table" >
                                 <tr>
                                     <td>#</td>
                                     <td>Name</td>
@@ -23,6 +24,8 @@
                                     </td>
                                 </tr>
                             </table>
+                        </div>
+  
                             <h3>Sum price : {{sumPrice}}$</h3>
                             <b-form-group class="my-2">
                                     <div class="form-floating">

@@ -1,10 +1,14 @@
 <template>
   <div class="app-wrapper">
-    <Navigation v-if="navigation" :class="[navOpen ? 'navi' : 'navi-small']"/>
-    <div class="app">
-      <Header v-if="navigation"/>
+
+    <div  class="app">
+      <Navigation v-if="navigation && isLogged" :class="[navOpen ? 'navi' : 'navi-small']"/>
+      <div  :class="[navOpen ? 'tran' : 'tran2']">
+      <Header v-if="navigation && isLogged"/>
       <router-view class="container" />
       <notifications position="bottom right" width="500" group="foo" />
+      </div>
+
       
     </div>
   </div>
@@ -30,7 +34,14 @@ export default {
     computed: {
   ...mapState([
       'navOpen',
-  ])
+  ]),
+  isLogged(){
+    if(this.$store.state.user){
+      return true;
+    }else{
+      return false;
+    }
+  }
   },
   created() {},
   mounted() {
@@ -86,20 +97,23 @@ $primary-yellow:#FFC857;
 .app-wrapper{
   display:flex;
   position:relative;
+  transition: .3s;
 }
 .navi{
-  height:100vh;
+  height:100vh !important;
   width:200px;
   background-color: #323031;
-  position:fixed;
-  left:0;
-  top:0;
+  position:fixed !important;
+  left:0 !important;
+  top:0 !important;
 }
 .navi-small{
-    height:100vh;
+    height:100vh !important;
   width:80px;
   background-color: #323031;
-  position:relative;
+    position:fixed !important;
+  left:0 !important;
+  top:0 !important;
 }
 .app {
   display: flex;
@@ -107,8 +121,19 @@ $primary-yellow:#FFC857;
   min-height: 100vh;
   background-color: white;
   width:100%;
+  position: relative;
+  transition: .3s;
 }
+.tran{
+  transition: .3s;
 
+  transform: translateX(220px);
+  width:80%;
+}
+.tran2{
+  transition: .3s;
+  width:90%;
+}
 .container {
   max-width: 1440px;
   margin: 0 auto;

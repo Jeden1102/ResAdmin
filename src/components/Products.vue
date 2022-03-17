@@ -13,6 +13,7 @@
       <Loading v-if="deletingProduct">Product is being deleted...</Loading>
       <Loading v-if="editingProduct">Product is being edited...</Loading>
         <h3>Products list</h3>
+        <div class="table-responsive">
             <table class="styled-table">
                 <tr>
                     <td>#</td>
@@ -39,6 +40,8 @@
                     </td>
                 </tr>
             </table>
+        </div>
+
         </b-card>
         <b-card>
             <h4>Add Procduct</h4>

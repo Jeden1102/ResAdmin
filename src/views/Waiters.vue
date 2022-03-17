@@ -11,15 +11,16 @@
               <EditWaiter class="edit-waiter" :user="showEditUser" v-if="showEditUser" v-on:close-modal="closeModal" v-on:get-users="getUsers" v-on:editing="editingWaiterMethod"/>
             </Transition>
             <h3>Waiters list</h3>
-            <table v-if="usersList.length>0" class="styled-table">
+            <div v-if="usersList.length>0" class="table-responsive">
+            <table  class="styled-table ">
                 <tr>
                     <td>#</td>
                     <td>Name</td>
                     <td>Second Name</td>
                     <td>Email</td>
                     <td>Salary</td>
-                    <td>Admin</td>
                     <td>Added</td>
+                    <td>Admin</td>
                     <td>Actions</td>
                 </tr>
                 <tr v-for="(user,index) in usersList" :key="index">
@@ -28,7 +29,7 @@
                     <td>{{ user.surname }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.salary }}$</td>
-                    <td>{{ new Date(user.created_at).toLocaleDateString() }}</td>
+                    <td>{{ user.created_at }}</td>
                     <td>{{ user.isAdmin }}</td>
                     <td>
                         <b-button variant="primary" class="mx-2" @click="showEdit(user)">Edit</b-button>
@@ -36,6 +37,8 @@
                     </td>
                 </tr>
             </table>
+            </div>
+
             <div v-else>
               <h4>There are no users</h4>
             </div>
@@ -82,6 +85,7 @@
             <b-input-group prepend="$" class="mb-2 mr-sm-2 mb-sm-0">
             <b-form-input v-model="salary"  placeholder="25"></b-form-input>
             </b-input-group>
+                      <div class="error" v-if="!$v.salary.required && $v.salary.$dirty">Field is required</div>
       </b-form-group>
 
       <b-form-group class="my-2">
@@ -144,6 +148,9 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
             minLength: minLength(3),
             email
           },
+          salary:{
+            required,
+          }
         },        
         mounted() {
           this.getUsers();
@@ -191,6 +198,9 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
             } 
               this.addingWaiter = true;
               let self = this;
+              var todayDate = new Date().toISOString().slice(0, 10);
+              var today = new Date();
+              var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
               axios.post(`${process.env.VUE_APP_API_URL}/api/addUser`,{
                     id:null,
                     email:this.email,
@@ -199,7 +209,7 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
                     surname:this.secondName,
                     salary:this.salary,
                     isAdmin:this.admin,
-                    created_at:Date.now(),
+                    created_at:`${todayDate} ${time}`,
               }).then(res=>{  
                 console.log(res);
                 self.addingWaiter = false;

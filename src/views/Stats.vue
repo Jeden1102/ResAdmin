@@ -1,13 +1,13 @@
 <template>
     <div>
     <b-tabs content-class="mt-3" align="center">
-        <b-tab title="Tips" >
+        <b-tab title="Tips" active>
                   <template #title>
           <button class="clear-btn-2">Tips</button>
       </template>
           <TipsInfo/>
         </b-tab>
-        <b-tab class="xyz" title="Work time" active>
+        <b-tab class="xyz" title="Work time" >
         <template #title>
           <button class="clear-btn">Work time</button>
       </template>

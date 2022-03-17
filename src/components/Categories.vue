@@ -9,6 +9,7 @@
     <h5>Categories</h5>
         <b-card>
         <h3>Categories list</h3>
+        <div class="table-responsive">
             <table class="styled-table">
                 <tr>
                     <td>#</td>
@@ -24,6 +25,8 @@
                     </td>
                 </tr>
             </table>
+        </div>
+
         </b-card>
         <b-card>
             <h4>Add Category</h4>

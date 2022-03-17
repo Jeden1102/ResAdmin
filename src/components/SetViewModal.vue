@@ -25,7 +25,7 @@ import axios from 'axios';
         },
         methods: {
             setView(){
-                axios.post(`${process.env.VUE_APP_API_URL}/api/views/`,{
+                axios.post(`${process.env.VUE_APP_API_URL}/api/views`,{
                 name:this.name,
                 value:this.data,
                 }).then(res=>{
