@@ -44,6 +44,7 @@
         </div>
     </div>
     <div class="login-box">
+    <b-alert show variant="primary" class="my-2" >For testing purposes enter : admin@o2.pl , pwd : 123123</b-alert>
         <h2>Login</h2>
     <b-form @submit.prevent="onSubmit"  >
       <b-form-group
@@ -82,7 +83,7 @@
       <b-button class="btn" type="submit" variant="primary">Login</b-button>
       <p class="typo__p" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
     </b-form>
-    <b-alert show variant="danger" v-if="error">{{ errorMsg }}</b-alert>
+    <b-alert show variant="danger" class="my-2" v-if="error">{{ errorMsg }}</b-alert>
     
     </div>
 </div>
@@ -125,12 +126,10 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
         mounted() {
         },
         methods: {
-                  onSlideStart(slide) {
-                      console.log(slide);
+                  onSlideStart() {
         this.sliding = true
       },
-      onSlideEnd(slide) {
-                      console.log(slide);
+      onSlideEnd() {
         this.sliding = false
       },
             onSubmit(){
@@ -149,10 +148,10 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
                     localStorage.setItem('user',JSON.stringify(response.data.user[0]));
                     self.$store.dispatch("getCurrentUser");
                     self.$router.push({name:"Home"});
-
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    self.errorMsg = error.response.data;
+                self.error = true;
                 });
             }
         },

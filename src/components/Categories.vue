@@ -83,7 +83,6 @@ import EditCategory from '@/components/EditCategory.vue';
         methods: {
         showEdit(user){
             this.showEditUser = user;
-            console.log(this.showEditUser);
           },
           closeModal(){
             this.showEditUser=null;
@@ -115,7 +114,6 @@ import EditCategory from '@/components/EditCategory.vue';
             getCategories(){
             axios.get(`${process.env.VUE_APP_API_URL}/api/categories`).then(data=>{
                 this.categories = data.data;
-                console.log(this.categories)
             })
             },
             deleteCategory(id){

@@ -134,7 +134,6 @@ import axios from 'axios'
         getCategories(){
         axios.get(`${process.env.VUE_APP_API_URL}/api/categories`).then(data=>{
             this.categories = data.data;
-            console.log(this.categories)
         })
         },
             editProduct(event){

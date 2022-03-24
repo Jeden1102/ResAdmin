@@ -85,19 +85,15 @@ import Loading from '@/components/Loading.vue';
             previewView(view){
                 this.stoliki = [];
                 this.stoliki = JSON.parse(view.value);
-                console.log(this.previewStoliki);
-                console.log(this.previewStoliki.length);
             },
             clearPreview(){
                 this.getStoliki();
             },
             cancel(){
-                console.log("ok");
                 this.showModal =false;
                 this.showLoadModal=false;
             },
             saveView(){
-                console.log(this.previewStoliki);
                 axios.post(`${process.env.VUE_APP_API_URL}/api/deleteViews`).then(data=>{
                     console.log(data);
                 });
@@ -137,7 +133,6 @@ import Loading from '@/components/Loading.vue';
             getStoliki(){
                 axios.get(`${process.env.VUE_APP_API_URL}/api/stoliki`).then(data=>{
                     this.stoliki = data.data;
-                    console.log(this.stoliki);
                 })
             },
             removeStolik(id){
@@ -154,7 +149,6 @@ import Loading from '@/components/Loading.vue';
                 var foundIndex = this.stoliki.findIndex(x => x.id ==id);
                 this.stoliki[foundIndex].xCoord = xCoord;
                 this.stoliki[foundIndex].yCoord = yCoord;
-                console.log(this.stoliki);
             },
             setAllTablesToDb(){
                 this.stoliki.forEach(el=>{

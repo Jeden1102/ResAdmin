@@ -4,8 +4,8 @@
     <div  class="app">
       <Navigation v-if="navigation && isLogged" :class="[navOpen ? 'navi' : 'navi-small']"/>
       <div  :class="[navOpen ? 'tran' : 'tran2']">
-      <Header v-if="navigation && isLogged"/>
-      <router-view class="container" />
+      <Header class="header-css" v-if="navigation && isLogged"/>
+      <router-view class="container move" />
       <notifications position="bottom right" width="500" group="foo" />
       </div>
 
@@ -76,6 +76,14 @@ export default {
 }
 .vue-notification{
   font-size:16px !important;
+}
+.header-css{
+  position:fixed;
+  left:100px;
+  top:0;
+}
+.move{
+  transform: translateY(150px);
 }
 .error{
   color:Red;

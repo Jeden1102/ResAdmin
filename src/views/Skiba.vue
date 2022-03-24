@@ -49,7 +49,6 @@ import axios from 'axios';
                     this.url = URL.createObjectURL(file);
             },
                         addProduct(event){
-                            console.log("ok");
                 let existingObj = this;
                 const config = {
                     headers: {

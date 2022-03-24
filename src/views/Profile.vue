@@ -212,7 +212,6 @@ import Loading from '@/components/Loading.vue';
                         });
                         this.pwdChanging = false;
                 }).catch(err=>{
-                    console.log(err.response)
                         this.$notify({
                           group: 'foo',
                           title: 'Info',

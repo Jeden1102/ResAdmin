@@ -158,7 +158,6 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
         methods: {
           showEdit(user){
             this.showEditUser = user;
-            console.log(this.showEditUser);
           },
           closeModal(){
             this.showEditUser=null;
@@ -219,6 +218,9 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
                   text: `User ${self.name} has been added succesfully!`,
                 });
                 this.getUsers();
+              }).catch(err=>{
+                console.log(err);
+                self.addingWaiter = false;
               })
             }
         },

@@ -102,7 +102,6 @@ import VueApexCharts from 'vue-apexcharts'
                 axios(`${process.env.VUE_APP_API_URL}/api/salesInfo`).then(res=>{
                     this.salesData = res.data;
                     this.addDataToChart(false);
-                    console.log(this.salesData)
                 })
             },
             addDataToChart(filter){
@@ -124,7 +123,6 @@ import VueApexCharts from 'vue-apexcharts'
                 if(this.filterData == "years"){
                   objToSort = 'orderByYear';
                 }
-                console.log(this.salesData[objToSort])
                 this.salesData[objToSort].forEach(element => {
                     orders.push(element.total_orders);
                     income.push(element.total_income);
@@ -148,7 +146,6 @@ import VueApexCharts from 'vue-apexcharts'
             }else{
             this.chartOptions.labels = xaxis;
             }
-            console.log(xaxis)
 
             }
         },

@@ -145,7 +145,6 @@ router.beforeEach(async (to,from,next)=>{
   }
 
   if(to.meta.requiresAuth){
-    console.log("trzeba");
     if(to.meta.requiresAdmin){
       if(!admin){
         return next({ name: 'Home' });
@@ -156,16 +155,10 @@ router.beforeEach(async (to,from,next)=>{
     if(user){
       return next();
     }else{
-      console.log("TAK")
       return next({ name: 'Login' });
     }
   }
 
-  console.log(user);
-  console.log(admin);
-  console.log(to)
-  console.log(from)
-  console.log(next)
   next();
 })
 

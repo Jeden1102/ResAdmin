@@ -184,7 +184,7 @@ import VueApexCharts from 'vue-apexcharts'
           avgTips(){
             //avg
             let  avgTipx =  this.tipsData.reduce((a, b) => Number(a) + (Number(b.tip)|| 0), 0) / this.tipsData.length;
-            this.avgTip = avgTipx.toFixed(2)
+            this.avgTip = !isNaN(avgTipx) ?   avgTipx.toFixed(2) : 0;
             //sum
             let sumTip = this.tipsData.reduce((a, b) => Number(a) + (Number(b.tip)|| 0), 0);
             this.sumTip = sumTip;
@@ -213,7 +213,6 @@ import VueApexCharts from 'vue-apexcharts'
               this.pieTipsChart.series.push(this.dayWithTip);
               this.pieTipsChart.series.push(this.dayWithoutTip);
               this.showChart=true;
-              console.log(this.chartData)
             }).catch(err=>{
               console.log(err);
             })
@@ -253,7 +252,6 @@ import VueApexCharts from 'vue-apexcharts'
             let dayTips = [];
             dayTips.push(dayWithTip);
             dayTips.push(dayWithoutTip);
-            console.log(dayTips)
             this.tipsRecentChart.series = [{
               data: xAxis
             }]

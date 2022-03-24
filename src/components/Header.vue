@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <b-dropdown>
+        <b-dropdown >
         <template #button-content>
       <div class="avatar">
         <img v-if="profilePicture" :src="`${imgLink}/${profilePicture}`"  alt="">
@@ -8,8 +8,8 @@
         
       </div>
         </template>
-        <b-dropdown-item ><router-link class="link" :to="{name:'Profile'}" ><img class="icon" src="@/assets/user.png" alt=""> Profile</router-link></b-dropdown-item>
-        <b-dropdown-item @click="signOut" ><img class="icon" src="@/assets/logout.png" alt=""> Logout</b-dropdown-item>
+        <b-dropdown-item  ><router-link class="link" :to="{name:'Profile'}" ><img class="icon" src="@/assets/user.png" alt=""> Profile</router-link></b-dropdown-item>
+        <b-dropdown-item  @click="signOut" ><img class="icon" src="@/assets/logout.png" alt=""> Logout</b-dropdown-item>
       </b-dropdown>
     </div>
 </template>
@@ -39,6 +39,7 @@
 $primary-dark :#323031;
 $primary-dark-blue : #084C61;
 $primary-yellow:#FFC857;
+
 .icon{
   width:13px;
   height:13px;
@@ -49,7 +50,7 @@ $primary-yellow:#FFC857;
   padding:10px 35px;
   margin-top:30px;
   margin-bottom:50px;
-  z-index:10;
+  z-index:90;
 }
 .link{
   color:black;

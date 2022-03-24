@@ -237,7 +237,6 @@ import EditProduct from '@/components/EditProduct.vue';
           getProducts(){
             axios.get(`${process.env.VUE_APP_API_URL}/api/products`).then(data=>{
               this.products = data.data;
-              console.log(this.products)
             })
           },
           deleteProduct(id){
@@ -313,7 +312,6 @@ import EditProduct from '@/components/EditProduct.vue';
             getCategories(){
             axios.get(`${process.env.VUE_APP_API_URL}/api/categories`).then(data=>{
                 this.categories = data.data;
-                console.log(this.categories)
             })
             },
             deleteCategory(id){

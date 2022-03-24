@@ -14,14 +14,12 @@ export default new Vuex.Store({
     setProfileInfo(state,doc){
       state.user = null;
       state.user = doc;
-      console.log(state.user);
     },
     initialiseStore(state){
       const userInfo = JSON.parse(localStorage.getItem("user"));
       if(userInfo){
         state.user = null;
         state.user = userInfo;
-        console.log(state.user);
       }
     }
   },

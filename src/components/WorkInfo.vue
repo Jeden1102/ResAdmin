@@ -131,14 +131,12 @@ import VueApexCharts from 'vue-apexcharts'
                 getWorkInfo(){
                     axios.get(`${process.env.VUE_APP_API_URL}/api/sumWork/${this.$store.state.user.id}`).then(res=>{
                         this.workInfo = res.data;
-                        console.log(this.workInfo)
                         this.totalOrders = this.workInfo.totalOrders[0].total_orders
                         this.workInfo.lastWeek.forEach(el=>{
                         this.workChart.series[0].data.push(el.hours_worked);
                         this.workChart.chartOptions.xaxis.categories.push(el.data)
                     })
                             this.showChart=true;
-                        console.log(this.workInfo)
                     }).catch(err=>{
                         console.log(err);
                     })
@@ -165,8 +163,6 @@ import VueApexCharts from 'vue-apexcharts'
                 yAxis.push(el.month_year)
               })
               }
-              console.log(xAxis);
-              console.log(yAxis);
             this.workChart.series = [{
               data: xAxis
             }]

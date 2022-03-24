@@ -111,7 +111,6 @@ import axios from 'axios';
             },
             checkout(){
                 //wysyłka do bazy + usunięcie z local storage
-                console.log(this.$store.state.user.id);
                 axios.post(`${process.env.VUE_APP_API_URL}/api/orders`,{
                     sum_price:this.sumPrice,
                     notes:this.notes,
@@ -141,7 +140,6 @@ import axios from 'axios';
                 release:true,
                 }).then(res=>{
                 console.log(res);
-                console.log("jajca");
                 this.$emit('get-stoliki');
                 this.cancel();
                 this.$notify({
@@ -166,7 +164,6 @@ import axios from 'axios';
                     let products = JSON.parse(localStorage.getItem("orders"));
                     let x = products.filter(el=>el.id == this.id);
                     if(x.length>0){
-                        console.log("stół już obsługiwany")
                         x[0].items.push(product);
                         localStorage.removeItem("orders");
                         localStorage.setItem("orders",JSON.stringify(products));
@@ -188,7 +185,6 @@ import axios from 'axios';
                     let products = JSON.parse(localStorage.getItem("orders"));
                     let x = products.filter(el=>el.id == this.id);
                     if(x.length>0){
-                        console.log("stół już obsługiwany")
                         x[0].items.splice(idx,1);
                         localStorage.removeItem("orders");
                         localStorage.setItem("orders",JSON.stringify(products));

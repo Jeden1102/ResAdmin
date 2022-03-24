@@ -40,8 +40,6 @@ import ShowOrderModal from '@/components/ShowOrderModal.vue';
             getStoliki(){
                 axios.get(`${process.env.VUE_APP_API_URL}/api/stoliki`).then(data=>{
                     this.stoliki = data.data;
-                    console.log("TAK");
-                    console.log(this.stoliki)
                 })
             },
             showModalMethod(id){
@@ -56,7 +54,6 @@ import ShowOrderModal from '@/components/ShowOrderModal.vue';
             getProducts(){
                 axios.get(`${process.env.VUE_APP_API_URL}/api/productsGrupped`).then(data=>{
                     this.products = data.data;
-                    console.log(this.products)
                 })
             },
             cancel(){

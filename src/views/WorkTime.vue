@@ -62,7 +62,6 @@ import axios from 'axios';
             checkIfStarted(){
                 axios.get(`${process.env.VUE_APP_API_URL}/api/work/${this.$store.state.user.id}`).then(res=>{
                     if(res.data != "" && res.data.end_day == null){
-                        console.log("xd")
                         this.workInfo = res.data;
                         this.workStarted = true;
                 this.secondsX = this.secBetween;
