@@ -13,6 +13,7 @@ import SalesInfo from "../views/SalesInfo.vue";
 import Res from "../views/Res.vue";
 import Stats from "../views/Stats.vue";
 import NotFound from "../views/NotFound.vue";
+import Delivery from "../views/Delivery.vue";
 import store from "../store/index";
 
 
@@ -55,6 +56,16 @@ const routes = [
     component: Login,
     meta:{
       title:"Login",
+      requiresAdmin:false,
+      requiresAuth: false,
+    }
+  },
+  {
+    path: "/Delivery",
+    name: "Delivery",
+    component: Delivery,
+    meta:{
+      title:"Delivery",
       requiresAdmin:false,
       requiresAuth: false,
     }

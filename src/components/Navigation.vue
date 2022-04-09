@@ -16,6 +16,7 @@
                     <p><router-link :class="[navOpen ? 'link' : 'link2']" :to="{name:'WorkTime'}"><img class="icon" src="@/assets/back-in-time.png" alt=""> <span v-if="navOpen"> Work time</span></router-link></p>
                     <p><router-link :class="[navOpen ? 'link' : 'link2']" :to="{name:'Res'}"><img class="icon" src="@/assets/website.png" alt=""> <span v-if="navOpen">Restaurant</span></router-link></p>
                     <p><router-link :class="[navOpen ? 'link' : 'link2']" :to="{name:'Stats'}"><img class="icon" src="@/assets/stats.png" alt=""> <span v-if="navOpen">Statistics</span></router-link></p>
+                    <p><router-link :class="[navOpen ? 'link' : 'link2']" :to="{name:'Delivery'}"><img class="icon" src="@/assets/delivery-man.png" alt=""> <span v-if="navOpen">Delivery</span></router-link></p>
                 </b-card>
             </b-collapse>
         </div>

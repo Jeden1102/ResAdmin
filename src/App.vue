@@ -1,6 +1,5 @@
 <template>
   <div class="app-wrapper">
-
     <div  class="app">
       <Navigation v-if="navigation && isLogged" :class="[navOpen ? 'navi' : 'navi-small']"/>
       <div  :class="[navOpen ? 'tran' : 'tran2']">
@@ -8,8 +7,6 @@
       <router-view class="container move" />
       <notifications position="bottom right" width="500" group="foo" />
       </div>
-
-      
     </div>
   </div>
 </template>
