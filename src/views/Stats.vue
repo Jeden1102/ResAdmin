@@ -1,11 +1,12 @@
 <template>
-    <div>
+    <div class="rel">
+      <Loading v-if="loadingData">Loading statistics data...</Loading>
     <b-tabs content-class="mt-3" align="center">
         <b-tab title="Tips" active>
                   <template #title>
           <button class="clear-btn-2">Tips</button>
       </template>
-          <TipsInfo/>
+          <TipsInfo v-on:change-loading="changeLoading" />
         </b-tab>
         <b-tab class="xyz" title="Work time" >
         <template #title>
@@ -21,17 +22,32 @@
 <script>
 import TipsInfo from '@/components/TipsInfo.vue';
 import WorkInfo from '@/components/WorkInfo.vue';
+import Loading from '@/components/Loading.vue';
 export default{
   name: "Stats",
-
   components:{
 TipsInfo,
-WorkInfo
-  }
+WorkInfo,
+Loading
+  },
+  data() {
+    return {
+      loadingData:false,
+    }
+  },
+  methods: {
+    changeLoading(){
+      this.loadingData = !this.loadingData;
+    },
+
+  },
 }
 </script>
 
 <style lang="scss" >
+.rel{
+  position: relative;
+}
 .filters-box{
   display:flex;
   justify-content: center;

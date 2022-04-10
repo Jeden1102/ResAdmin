@@ -174,8 +174,10 @@ import VueApexCharts from 'vue-apexcharts'
         },
         methods: {
           getTipsData(){
+            this.$emit('change-loading');
             axios.get(`${process.env.VUE_APP_API_URL}/api/tipData/${this.$store.state.user.id}`).then(res=>{
               this.tipsData = res.data;
+                        this.$emit('change-loading');
               this.avgTips();
             }).catch(err=>{
               console.log(err);

@@ -1,5 +1,6 @@
 <template>
     <div class="rel">
+        <Loading v-if="loadingData">Loading view...</Loading>
         <ShowOrderModal class="modal-x"  v-if="showModal" :id="stolId" :categories="categories" :products="products" v-on:cancel="cancel" v-on:get-stoliki="getStoliki"/>
         <b-card>
             <h2>Restaurant View</h2>
@@ -15,12 +16,14 @@
 import axios from 'axios';
 import Stolik from '@/components/Stolik.vue';
 import ShowOrderModal from '@/components/ShowOrderModal.vue';
+import Loading from '@/components/Loading.vue';
     export default {
   name: "Res",
 
         components:{
             Stolik,
             ShowOrderModal,
+            Loading
         },
         data() {
             return {
@@ -29,6 +32,7 @@ import ShowOrderModal from '@/components/ShowOrderModal.vue';
                 stolId:null,
                 categories:null,
                 products:null,
+                loadingData:false,
             }
         },
         mounted() {
@@ -38,8 +42,10 @@ import ShowOrderModal from '@/components/ShowOrderModal.vue';
         },
         methods: {
             getStoliki(){
+                this.loadingData=true;
                 axios.get(`${process.env.VUE_APP_API_URL}/api/stoliki`).then(data=>{
                     this.stoliki = data.data;
+                    this.loadingData=false;
                 })
             },
             showModalMethod(id){

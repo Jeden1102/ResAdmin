@@ -12,6 +12,7 @@
                 <Loading v-if="addingProduct">Product is being added...</Loading>
       <Loading v-if="deletingProduct">Product is being deleted...</Loading>
       <Loading v-if="editingProduct">Product is being edited...</Loading>
+      <Loading v-if="loadingData">Products data is being loaded ..</Loading>
         <h3>Products list</h3>
         <div class="table-responsive">
             <table class="styled-table">
@@ -200,6 +201,7 @@ import EditProduct from '@/components/EditProduct.vue';
                 url:null,
                 imgCover:null,
                 imgLink : "https://foodpenguinimages.s3.amazonaws.com/uploads",
+                loadingData:false,
             }
         },
         components:{
@@ -235,8 +237,10 @@ import EditProduct from '@/components/EditProduct.vue';
             this.variants.splice(index,1);
           },
           getProducts(){
+            this.loadingData=true;
             axios.get(`${process.env.VUE_APP_API_URL}/api/products`).then(data=>{
               this.products = data.data;
+            this.loadingData=false;
             })
           },
           deleteProduct(id){
@@ -310,8 +314,11 @@ import EditProduct from '@/components/EditProduct.vue';
                     });
             },
             getCategories(){
+              this.loadingData=true;
             axios.get(`${process.env.VUE_APP_API_URL}/api/categories`).then(data=>{
                 this.categories = data.data;
+              this.loadingData=false;
+
             })
             },
             deleteCategory(id){

@@ -1,6 +1,7 @@
 <template>
     <div class="rel">
         <Loading v-if="addingTable">Table is being added...</Loading>
+        <Loading v-if="loadingData">Loading view...</Loading>
         <SetViewModal class="modal-x" :data="saveViewJson" v-if="showModal" v-on:cancel="cancel"/>
         <LoadViewModal class="modal-x"  v-if="showLoadModal" v-on:cancel="cancel" v-on:preview-view="previewView" v-on:clear-preview="clearPreview" v-on:save-view="saveView"/>
         <b-card>
@@ -60,6 +61,7 @@ import Loading from '@/components/Loading.vue';
                 showLoadModal:false,
                 submitStatus:'',
                 addingTable:false,
+                loadingData:false,
             }
         },
         components:{
@@ -131,8 +133,10 @@ import Loading from '@/components/Loading.vue';
                 })
             },
             getStoliki(){
+                this.loadingData=true;
                 axios.get(`${process.env.VUE_APP_API_URL}/api/stoliki`).then(data=>{
                     this.stoliki = data.data;
+                    this.loadingData=false;
                 })
             },
             removeStolik(id){

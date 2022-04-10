@@ -1,5 +1,6 @@
 <template>
-    <div>   
+    <div class="rel">   
+      <Loading v-if="loadingData">Data is being loaded</Loading>
         <div class="flex">
             <div class="box">
               <img src="@/assets/pay.png" alt="">
@@ -43,13 +44,16 @@
 <script>
 import axios from 'axios'
 import VueApexCharts from 'vue-apexcharts'
+import Loading from '@/components/Loading.vue';
     export default {
     components:{
         apexchart: VueApexCharts,
+        Loading
       },
         data() {
             return {
             filterData:'lastWeek',
+            loadingData:false,
             filtering:false,
                 salesData:null,
                          series: [{
@@ -99,8 +103,10 @@ import VueApexCharts from 'vue-apexcharts'
         methods: {
 
             getSalesData(){
+              this.loadingData=true;
                 axios(`${process.env.VUE_APP_API_URL}/api/salesInfo`).then(res=>{
                     this.salesData = res.data;
+              this.loadingData=false;
                     this.addDataToChart(false);
                 })
             },
@@ -156,5 +162,8 @@ import VueApexCharts from 'vue-apexcharts'
 <style lang="scss" scoped>
 .flex{
     display:flex;
+}
+.rel{
+  position: relative;
 }
 </style>

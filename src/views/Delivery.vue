@@ -1,5 +1,6 @@
 <template>
     <div class="rel">
+      <Loading v-if="loadingData">Delivery data is being loaded....</Loading>
               <ManageOrder class="edit-waiter" :order="showOrder" v-if="showOrder" v-on:close-modal="closeModal" v-on:get-orders="getOrders"/>
         <h2>Delivery</h2>
           <b-tabs content-class="mt-3">
@@ -172,9 +173,11 @@
 <script>
 import axios from 'axios'
 import ManageOrder from '@/components/ManageOrder.vue';
+import Loading from '@/components/Loading.vue';
     export default {
         components:{
-            ManageOrder
+            ManageOrder,
+            Loading,
         },
         data() {
             return {
@@ -183,6 +186,7 @@ import ManageOrder from '@/components/ManageOrder.vue';
                 ordersRejected:null,
                 ordersFinished:null,
                 showOrder:null,
+                loadingData:false,
             }
         },
         mounted() {
@@ -193,15 +197,16 @@ import ManageOrder from '@/components/ManageOrder.vue';
                 this.showOrder=null;
             },
             getOrders(){
+              this.loadingData=true;
             axios.get(`${process.env.VUE_APP_API_URL}/api/ordersDelivery`).then(res=>{
               this.ordersToMange = res.data[0] ? res.data[0] : [];
               this.ordersAccpeted = res.data[1] ? res.data[1] : [];
               this.ordersRejected =  res.data[2] ? res.data[2] : [];
               this.ordersFinished =  res.data[3] ? res.data[3] : [];
-              console.log(res.data)
-              console.log(this.ordersToMange);
+              this.loadingData=false;
             }).catch(err=>{
               console.log(err);
+              this.loadingData=false;
             })
             },
             manageOrder(order){

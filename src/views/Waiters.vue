@@ -4,6 +4,7 @@
       <Loading v-if="addingWaiter">Waiter is being added...</Loading>
       <Loading v-if="deletingWaiter">Waiter is being deleted...</Loading>
       <Loading v-if="editingWaiter">Waiter is being edited...</Loading>
+      <Loading v-if="loadingData">Getting waiters data..</Loading>
         <h2>Waiters</h2>
         
         <b-card>
@@ -128,6 +129,7 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
                     deletingWaiter:false,
                     editingWaiter:false,
                     submitStatus:'',
+                    loadingData:false,
             }
         },
         validations: {
@@ -182,10 +184,13 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
               })
             },
             getUsers(){
+              this.loadingData=true;
             axios.get(`${process.env.VUE_APP_API_URL}/api/users`).then(res=>{
               this.usersList = res.data;
+              this.loadingData=false;
             }).catch(err=>{
               console.log(err);
+              this.loadingData=false;
             })
             },
             onSubmit(){
