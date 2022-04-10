@@ -24,7 +24,7 @@
                             <td>{{ order.time }}</td>
                             <td>{{ order.city }}</td>
                             <td>{{ order.street }} {{ order.number }}</td>
-                            <td>{{ order.email }}$</td>
+                            <td>{{ order.email }}</td>
                             <td>{{ order.name }}</td>
                             <td v-if="JSON.parse(order.items.length>0)">
                                 <p v-for="(item,index) in JSON.parse(order.items)" :key="index">
@@ -37,6 +37,9 @@
                             </td>
                         </tr>
                     </table>
+                </div>
+                <div v-else>
+                  There's no data
                 </div>
             </b-tab>
             <b-tab title="Accepted">
@@ -54,6 +57,7 @@
                             <td>Items</td>
                             <td>Status</td>
                             <td>Status info</td>
+                            <td>Action</td>
                         </tr>
                         <tr v-for="(order,index) in ordersAccpeted" :key="index">
                             <td>{{order.id}}</td>
@@ -61,7 +65,7 @@
                             <td>{{ order.time }}</td>
                             <td>{{ order.city }}</td>
                             <td>{{ order.street }} {{ order.number }}</td>
-                            <td>{{ order.email }}$</td>
+                            <td>{{ order.email }}</td>
                             <td>{{ order.name }}</td>
                             <td v-if="JSON.parse(order.items.length>0)">
                                 <p v-for="(item,index) in JSON.parse(order.items)" :key="index">
@@ -70,12 +74,18 @@
                             </td>
                             <td>{{ order.status }}</td>
                             <td>{{order.statusInfo}}</td>
+                            <td>
+                                <b-button variant="success" class="mx-2" @click="sendOrder(order)">Send Order <img class="icon" src="@/assets/delivery-man.png" alt=""> </b-button>
+                            </td>
                         </tr>
                     </table>
                 </div>
+                <div v-else>
+                  There's no data
+                </div>
             </b-tab>
             <b-tab title="Rejected" >
-              <p>Rejeceted/p>
+              <p>Rejeceted</p>
                 <div v-if="ordersRejected.length>0" class="table-responsive">
                     <table  class="styled-table ">
                         <tr>
@@ -96,7 +106,7 @@
                             <td>{{ order.time }}</td>
                             <td>{{ order.city }}</td>
                             <td>{{ order.street }} {{ order.number }}</td>
-                            <td>{{ order.email }}$</td>
+                            <td>{{ order.email }}</td>
                             <td>{{ order.name }}</td>
                             <td v-if="JSON.parse(order.items.length>0)">
                                 <p v-for="(item,index) in JSON.parse(order.items)" :key="index">
@@ -109,6 +119,49 @@
                             </td>
                         </tr>
                     </table>
+                </div>
+                <div v-else>
+                  There's no data
+                </div>
+            </b-tab>
+            <b-tab title="Finished">
+                <p>Finished</p>
+                <div v-if="ordersFinished.length>0" class="table-responsive">
+                    <table  class="styled-table ">
+                        <tr>
+                            <td>#</td>
+                            <td>Date</td>
+                            <td>Time</td>
+                            <td>City</td>
+                            <td>Street</td>
+                            <td>Email</td>
+                            <td>Name</td>
+                            <td>Items</td>
+                            <td>Status</td>
+                            <td>Status Info</td>
+                        </tr>
+                        <tr v-for="(order,index) in ordersFinished" :key="index">
+                            <td>{{order.id}}</td>
+                            <td>{{ order.date }}</td>
+                            <td>{{ order.time }}</td>
+                            <td>{{ order.city }}</td>
+                            <td>{{ order.street }} {{ order.number }}</td>
+                            <td>{{ order.email }}</td>
+                            <td>{{ order.name }}</td>
+                            <td v-if="JSON.parse(order.items.length>0)">
+                                <p v-for="(item,index) in JSON.parse(order.items)" :key="index">
+                                    {{ item.name }} - {{ item.size }}
+                                </p>
+                            </td>
+                            <td>{{ order.status }}</td>
+                            <td>
+                                {{ order.statusInfo }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div v-else>
+                  There's no data
                 </div>
             </b-tab>
         </b-tabs>
@@ -128,6 +181,7 @@ import ManageOrder from '@/components/ManageOrder.vue';
                 ordersToMange:null,
                 ordersAccpeted:null,
                 ordersRejected:null,
+                ordersFinished:null,
                 showOrder:null,
             }
         },
@@ -143,6 +197,7 @@ import ManageOrder from '@/components/ManageOrder.vue';
               this.ordersToMange = res.data[0] ? res.data[0] : [];
               this.ordersAccpeted = res.data[1] ? res.data[1] : [];
               this.ordersRejected =  res.data[2] ? res.data[2] : [];
+              this.ordersFinished =  res.data[3] ? res.data[3] : [];
               console.log(res.data)
               console.log(this.ordersToMange);
             }).catch(err=>{
@@ -152,6 +207,28 @@ import ManageOrder from '@/components/ManageOrder.vue';
             manageOrder(order){
                 this.showOrder=order;
                 console.log(this.showOrder);
+            },
+            sendOrder(order){
+              let data = order;
+              data.action=3;
+              let self = this;
+              console.log(data);
+                axios.post(`${process.env.VUE_APP_API_URL}/api/ordersDelivery/${order.id}?_method=PUT`,{
+                action:3,
+                email:order.email,
+                info:data,
+                }).then(res=>{
+                console.log(res);
+                this.getOrders();
+                self.$notify({
+                    group: 'foo',
+                    title: 'Info',
+                    text: `Order has been send succesfully!`,
+                    });
+
+                }).catch(err=>{
+                console.log(err)
+                })
             }
         },
     }
@@ -160,6 +237,10 @@ import ManageOrder from '@/components/ManageOrder.vue';
 <style lang="scss"  scoped>
 $primary-dark-blue : #084C61;
 $primary-yellow:#FFC857;
+.icon{
+  width:30px;
+  height:30px;
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;

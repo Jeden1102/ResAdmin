@@ -50,6 +50,9 @@ import axios from 'axios'
                 this.$emit('close-modal');
             },
             menageOrder(dec){
+              this.order.action=dec;
+              this.order.info = this.info;
+              console.log(this.order);
                 axios.post(`${process.env.VUE_APP_API_URL}/api/ordersDelivery/${this.order.id}?_method=PUT`,{
                 action:dec,
                 info:this.info,
