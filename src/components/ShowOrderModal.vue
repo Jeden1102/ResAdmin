@@ -33,6 +33,7 @@
                                     <label for="floatingTextarea2">Notes</label>
                                     </div>
                                 </b-form-group>
+                                    <label for="floatingTextarea2">Tip</label>
                                     <b-input-group  prepend="$" class="mb-2 mr-sm-2 mb-sm-0 my-2">
                                     <b-form-input v-model="tip" id="inline-form-input-username" placeholder="Tip"></b-form-input>
                                     </b-input-group>

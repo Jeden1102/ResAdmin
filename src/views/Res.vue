@@ -74,9 +74,12 @@ import Loading from '@/components/Loading.vue';
     position:relative;
 }
 .modal-x{
-    position: absolute;
+    position: fixed;
+    width:100%;
+    height:100vh;
+    overflow-y: scroll;
 left:50%;
-top:50%;
+top:400px;
 transform: translate(-50%,-50%);
 background: rgba(0, 0, 0, 0.65);
 box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );

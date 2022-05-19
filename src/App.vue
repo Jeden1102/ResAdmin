@@ -103,6 +103,8 @@ $primary-yellow:#FFC857;
   display:flex;
   position:relative;
   transition: .3s;
+  width:100vw;
+  overflow-x:hidden;
 }
 .navi{
   height:100vh !important;
