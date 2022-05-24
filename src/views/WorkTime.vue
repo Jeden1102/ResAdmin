@@ -123,11 +123,20 @@ import axios from 'axios';
 .img{
     transform: scale(.5);
 }
+@media(max-width:650px){
+    img{
+        transform: scale(.4);
+    }
+}
 .flex{
     display:flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+.flex h2{
+    overflow-wrap: break-word;
+    width:30%;
 }
 .small-img{
     width:25px;

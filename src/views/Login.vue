@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="login-wrapper">
     <div class="img">
         <div class="content">
             <h1><span class="orange">Food</span><span>Penguin</span></h1>
@@ -180,10 +180,17 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
 .btn{
     margin-top:15px;
 }
-.container{
+.login-wrapper{
     display:flex;
-    margin-top:50px;
-    min-height: 70vh;
+    width:100%;
+    height:100%;
+    justify-content: center;
+    align-items:center;
+}
+@media(max-width:1024px){
+    .login-wrapper{
+        flex-direction: column;
+    }
 }
 .img{
     background:url('../assets/login1.jpg');
@@ -202,6 +209,7 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
         border: 1px solid rgba( 255, 255, 255, 0.18 );
         padding:15px;
         margin:0 30px;
+        
         h1{
             text-align: center;
         }

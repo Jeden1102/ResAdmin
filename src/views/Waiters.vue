@@ -33,8 +33,14 @@
                     <td>{{ user.created_at }}</td>
                     <td>{{ user.isAdmin }}</td>
                     <td>
+                      <div v-if="user.email != 'admin@o2.pl' && user.email != 'dominik@o2.pl'">
                         <b-button variant="primary" class="mx-2" @click="showEdit(user)">Edit</b-button>
                         <b-button variant="danger" @click="deleteUser(user.id)">Delete</b-button>
+                      </div>
+                      <div v-else>
+                        Nie można ingerować
+                      </div>
+
                     </td>
                 </tr>
             </table>

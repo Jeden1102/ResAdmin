@@ -5,12 +5,12 @@
             <div class="box">
               <img src="@/assets/pay.png" alt="">
               <h5>Average order </h5>
-              <h3>{{salesData.avgOrderPrice}}$</h3>
+              <h3>{{salesData.avgOrderPrice.toFixed(2)}}$</h3>
             </div>
             <div class="box">
               <img src="@/assets/pay.png" alt="">
               <h5>Heighest order </h5>
-              <h3>{{salesData.maxOrderPrice}}$</h3>
+              <h3>{{salesData.maxOrderPrice.toFixed(2)}}$</h3>
             </div>
             <div class="box">
               <img src="@/assets/table1.png" alt="">
@@ -20,7 +20,7 @@
             <div class="box">
               <img src="@/assets/stats.png" alt="">
               <h5>Summary income</h5>
-              <h3>{{salesData.sumPrice}}$</h3>
+              <h3>{{salesData.sumPrice.toFixed(2)}}$</h3>
             </div>
         </div>
           <div class="filters-box">
@@ -162,6 +162,7 @@ import Loading from '@/components/Loading.vue';
 <style lang="scss" scoped>
 .flex{
     display:flex;
+    flex-wrap: wrap;
 }
 .rel{
   position: relative;

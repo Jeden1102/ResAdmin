@@ -270,6 +270,8 @@ import VueApexCharts from 'vue-apexcharts'
     }
 </script>
 
-<style lang="scss" scoped>
-
+<style  scoped>
+.flex{
+  flex-wrap:wrap;
+}
 </style>

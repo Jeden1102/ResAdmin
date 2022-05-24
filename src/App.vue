@@ -1,10 +1,10 @@
 <template>
   <div class="app-wrapper">
     <div  class="app">
-      <Navigation v-if="navigation && isLogged" :class="[navOpen ? 'navi' : 'navi-small']"/>
-      <div  :class="[navOpen ? 'tran' : 'tran2']">
+      <Navigation  @hide-nav="hideNav" v-if="navigation && isLogged" :class="[navigationOpen ? 'navi' : 'navi-small']"/>
+      <div  :class="[navigationOpen && isLogged  ? 'tran' : 'tran2']">
       <Header class="header-css" v-if="navigation && isLogged"/>
-      <router-view class="container move" />
+      <router-view class="my-container" :class="[ isLogged  ? 'move' : '']"/>
       <notifications position="bottom right" width="500" group="foo" />
       </div>
     </div>
@@ -14,7 +14,6 @@
 <script>
 import Navigation from '@/components/Navigation.vue';
 import Header from '@/components/Header.vue';
-import { mapState } from 'vuex';
 // import firebase from "firebase/app";
 // import "firebase/auth";
 export default {
@@ -26,12 +25,11 @@ export default {
   data() {
     return {
       navigation:true,
+      navigationOpen:false,
     };
   },
     computed: {
-  ...mapState([
-      'navOpen',
-  ]),
+
   isLogged(){
     if(this.$store.state.user){
       return true;
@@ -43,9 +41,13 @@ export default {
   created() {},
   mounted() {
     this.checkRoute();
+    this.checkWidth();
         this.$store.dispatch("getCurrentUser");
   },
   methods: {
+    hideNav(){
+      this.navigationOpen = !this.navigationOpen
+    },
     checkRoute(){
       let name = this.$route.name
       if(name === "Login"){
@@ -53,6 +55,14 @@ export default {
         return;
       }
       this.navigation = true;
+    },
+    checkWidth(){
+      if(window.screen.availWidth<600){
+        this.navigationOpen = false;
+      }else{
+        this.navigationOpen = this.$store.state.navOpen;
+      }
+      console.log(window.screen.width)
     }
   },
   watch: {
@@ -80,7 +90,7 @@ export default {
   top:0;
 }
 .move{
-  transform: translateY(150px);
+  transform: translateY(100px);
 }
 .error{
   color:Red;
@@ -114,6 +124,11 @@ $primary-yellow:#FFC857;
   left:0 !important;
   top:0 !important;
 }
+@media(max-width:600px){
+  .navi{
+    width:80px;
+  }
+}
 .navi-small{
     height:100vh !important;
   width:80px;
@@ -133,12 +148,12 @@ $primary-yellow:#FFC857;
 }
 .tran{
   transition: .3s;
-
   transform: translateX(220px);
   width:80%;
 }
 .tran2{
   transition: .3s;
+  transform: translateX(120px);
   width:90%;
 }
 .container {
@@ -155,5 +170,32 @@ $primary-yellow:#FFC857;
 
 .link-light {
   color: #fff;
+}
+.my-container{
+  padding:15px;
+  margin:5px;
+  background-color: rgb(235, 235, 235);
+  border-radius: 5px;
+  width:95% !important;
+}
+
+@media(max-width:1024px){
+.my-container{
+    width:90% !important;
+
+}
+}
+@media(max-width:768px){
+.my-container{
+    width:75% !important;
+
+}
+}
+@media(max-width:550px){
+.my-container{
+  transform: translate(-30px,70px) !important;
+    width:75% !important;
+    margin: 0 !important;
+}
 }
 </style>
