@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="rel">
         <b-card>
             <h2>Menu</h2>
               <b-tabs content-class="mt-3">
@@ -29,5 +29,7 @@ import Products from '@/components/Products.vue';
 </script>
 
 <style lang="scss" scoped>
-
+.rel{
+    color:black;
+}
 </style>

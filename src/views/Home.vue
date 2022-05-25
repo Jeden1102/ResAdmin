@@ -38,6 +38,7 @@ export default {
 <style >
 .w-75{
   width:100% !important;
+  color:black !important;
   margin:0 !important;
 }
 </style>

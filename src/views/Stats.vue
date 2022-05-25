@@ -44,9 +44,13 @@ Loading
 }
 </script>
 
-<style lang="scss" >
+<style lang="scss" scoped>
+*{
+}
 .rel{
   position: relative;
+  background:rgb(238, 238, 238);
+  color:black;
 }
 .filters-box{
   display:flex;
@@ -240,5 +244,9 @@ html {
   background-color: white;
   color:rgb(59, 112, 224);
   border:none;
+  width:100px !important;
+  height:30px !important;
+  font-weight: bold;
 }
+
 </style>

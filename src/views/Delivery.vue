@@ -240,6 +240,10 @@ import Loading from '@/components/Loading.vue';
 </script>
 
 <style lang="scss"  scoped>
+.rel{
+  background-color: rgb(236, 236, 236);
+  color:black;
+}
 $primary-dark-blue : #084C61;
 $primary-yellow:#FFC857;
 .icon{

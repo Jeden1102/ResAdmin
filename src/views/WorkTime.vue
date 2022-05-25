@@ -10,7 +10,7 @@
             <h1>{{ seconds }}</h1>
             <h6>{{normalDate}}</h6>
             <h2>Hi {{ waiterName }} ! Are u done?  End your work time.</h2>
-            <b-button variant="outline-primary" @click="endWork">Stop <img src="@/assets/finish.png" class="small-img" alt=""></b-button>
+            <b-button variant="primary" @click="endWork">Stop <img src="@/assets/finish.png" class="small-img" alt=""></b-button>
         </div>
     </div>
 </template>
@@ -121,11 +121,11 @@ import axios from 'axios';
 
 <style lang="scss" scoped>
 .img{
-    transform: scale(.5);
+    width:500px;
 }
 @media(max-width:650px){
     img{
-        transform: scale(.4);
+        width:200px;
     }
 }
 .flex{

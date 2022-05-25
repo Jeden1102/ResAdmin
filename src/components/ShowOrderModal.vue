@@ -1,9 +1,8 @@
 <template>
     <div>
          
-          <b-button variant="primary" v-b-toggle.collapse-25 class="m-1">Show Order</b-button>
            <b-collapse id="collapse-25" class="my-2" >
-                <b-card class="text-black">
+                <b-card class="text-black relative">
                     <div v-if="orderedProducts">
                         <div class="table-responsive">
                       <table class="styled-table" >
@@ -39,7 +38,7 @@
                                     </b-input-group>
                               <b-button variant="primary" class="my-2" v-b-modal.modal-1>Checkout</b-button>
 
-                            <b-modal ref="modal-1" hide-footer id="modal-1" title="BootstrapVue">
+                            <b-modal ref="modal-1" hide-footer id="modal-1" title="Checkout">
                                 <p class="my-4">Are you sure your want to checkout this table ? After that you cant change any details about it's order!</p>
                                 <b-button variant="outline-success" @click="checkout">Checkout</b-button>
                                 <b-button class="mx-2" variant="outline-danger" @click="hideModal">Cancel</b-button>
@@ -49,7 +48,10 @@
                         <p v-else>There's nothing to see here, add a product first.</p>
                 </b-card>
            </b-collapse>
+
           <b-card no-body>
+          <b-button size="lg" variant="primary" v-b-toggle.collapse-25 class="m-1 ">Show Order ({{itemsCount}})</b-button>
+
             <b-tabs card>
                 
             <b-tab v-for="category in categories" :key="category.id" :title="category.name" active>
@@ -104,6 +106,9 @@ import axios from 'axios';
         computed:{
             sumPrice(){
                 return this.orderedProducts[0].items.reduce((a, b) => Number(a) + (Number(b.price)|| 0), 0);
+            },
+            itemsCount(){
+                return this.orderedProducts[0].items.length;
             }
         },
         methods: {
@@ -201,6 +206,15 @@ import axios from 'axios';
 </script>
 
 <style lang="scss" scoped>
+.relative{
+    position:relative;
+}
+.absolute{
+    position: absolute;
+    left:70%;
+    top:50%;
+    z-index:999;
+}
 .small-img{
   width:100px;
   height:100px;

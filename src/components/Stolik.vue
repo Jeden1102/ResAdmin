@@ -107,6 +107,7 @@ import axios from 'axios'
 .stolik{
     width:100px !important;
     height:100px !important;
+    color:black !important;
 }
 .stol-id{
     position:absolute;

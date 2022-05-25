@@ -26,7 +26,7 @@
             </b-form>
         </b-card>
         <b-button class="my-2" variant="success" @click="setAllTablesToDb" v-if="stolikiChanged">Save new view (set all tables positions)</b-button>
-        <b-button class="my-2" variant="outline-primary" @click="setView" >Save this view as a template</b-button>
+        <b-button class="my-2" variant="primary" @click="setView" >Save this view as a template</b-button>
         <b-button variant="outline-info" class="mx-2" @click="showLoadModalMethod" v-if="stoliki.length ==0">Load view</b-button>
 
         <b-card class="sala" v-if="previewStoliki.length==0">

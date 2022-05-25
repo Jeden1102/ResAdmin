@@ -174,7 +174,8 @@ $primary-yellow:#FFC857;
 .my-container{
   padding:15px;
   margin:5px;
-  background-color: rgb(235, 235, 235);
+  background-color: #323031;
+  color:white;
   border-radius: 5px;
   width:95% !important;
 }

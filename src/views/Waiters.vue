@@ -5,7 +5,7 @@
       <Loading v-if="deletingWaiter">Waiter is being deleted...</Loading>
       <Loading v-if="editingWaiter">Waiter is being edited...</Loading>
       <Loading v-if="loadingData">Getting waiters data..</Loading>
-        <h2>Waiters</h2>
+        <h2 class="text-white">Waiters</h2>
         
         <b-card>
             <Transition name="fade">
@@ -239,6 +239,9 @@ import { required, minLength,email } from 'vuelidate/lib/validators'
 </script>
 
 <style lang="scss" scoped>
+.rel{
+  color:black;
+}
 $primary-dark-blue : #084C61;
 $primary-yellow:#FFC857;
 .fade-enter-active,
